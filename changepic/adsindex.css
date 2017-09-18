@@ -1,0 +1,47 @@
+/*css reset*/
+ul{
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+
+.wrap{
+	width:323px;
+	margin:50px auto;
+	padding:5px;
+	border:5px solid #0CD1AB;
+	border-radius:10px;
+	background:#E8FBFC;
+}
+.left,.right,img{
+	float:left;
+}
+img{
+	width:213px;
+	margin:0 5px;
+}
+
+.left,.right{
+	width:50px;
+}
+li{
+	border:1px solid #0CD1AB;
+	border-radius:2px;
+	margin-top:2px;
+	font:11px/20px "宋体";
+	text-align:center;
+}
+li:nth-of-type(1){
+	margin-top:0px;
+}
+
+.active{
+	background:#0CD1AB;
+	color:white;
+}
+
+.clearfix:after{
+	content:"";
+	display:block;
+	clear:both;
+}
