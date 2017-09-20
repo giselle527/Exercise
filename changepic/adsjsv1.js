@@ -26,7 +26,17 @@ window.onload=function(){
 		aLi[i].onmouseout=startTimer;
 	}
 
+	//用两个函数分别处理li有active和没active的情况
+	function activeItem(index){
+		aLi[index].className="active";
+	}
+	function deactiveItem(index){
+		aLi[index].className="";
+	}
+
 	function nextFrame(){
+		deactiveItem(index);//没有改变index前去掉active
+
 		index += delta;
 		if(index >= length){
 			index = length - 1 - 1;
@@ -37,19 +47,8 @@ window.onload=function(){
 			delta = 1;
 			// console.log("up"+index);
 		}
-		// console.log(index+"&"+delta);
-		activeItem(index,delta);
+		activeItem(index);//改变index后加上active
 	}
-
-	function activeItem(index,delta){
-	// console.log(index+"&"+delta+" aLi[index-delta]:"+(index-delta));
-		if(index-delta==-1){
-			aLi[1].className="";
-		}else{
-			aLi[index-delta].className="";
-		}		
-		aLi[index].className="active";
-	};
 
 	function startTimer(){
 		timer = setInterval(nextFrame, 1000);
