@@ -1,0 +1,65 @@
+/*css reset*/
+ul{
+	list-style:none;
+	margin:0;
+	padding:0;
+}
+
+.wrap{
+	width:700px;
+	height:400px;
+	border:10px solid #686363;
+	margin:50px auto;
+	border-radius:15px;
+}
+.left{
+	width:100px;
+	background:#e7e7e7;
+	float:left;
+}
+.left li{
+	height:100px;
+	border-bottom:5px dotted #686363;
+	box-sizing:border-box;
+	font:bold 25px/105px "宋体";
+	text-align:center;
+}
+.left li:nth-of-type(4){
+	border-bottom:none;
+}
+
+
+.right{
+	width:600px;
+	float:right;
+	position:relative;
+	display:none;
+}
+.right img{
+	vertical-align:top;
+}
+.right span{
+	width:200px;
+	height:35px;
+	background:#e7e7e7;
+	box-sizing:border-box;
+	border-left:2px solid #686363;
+	font:12px/35px "宋体";
+	text-align:center;
+	opacity:0.8;
+	position:absolute;
+	left:0px;
+	bottom:0px;
+}
+.wrap .active{
+	background:#ef3163;
+	color:white;
+}
+.wrap .show{
+	display:block;
+}
+.clearfix:after{
+	content:"";
+	display:block;
+	clear:both;
+}

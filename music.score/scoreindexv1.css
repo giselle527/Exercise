@@ -1,0 +1,50 @@
+/*经验：行高与父元素一致可使元素居中。*/
+/*css reset*/
+em{
+	font-style:normal;
+}
+strong{
+	font-weight:normal;
+}
+p{
+	margin:0;
+}
+
+.wrap{
+	width:470px;
+	height:60px;
+	border:3px solid #F8710E;
+	margin:50px auto;
+}
+
+em{
+	display:inline-block;
+	line-height:60px;
+	vertical-align:top;
+	color:red;
+	margin:-4px -7px 0 10px;
+
+}
+span{
+	font:bold 17px/60px	"宋体";
+}
+.calculate{
+	font-size:0;
+}
+.star{
+	display:inline-block;
+	width:20px;
+	height:20px;
+	background:url(images/star1.png) no-repeat -38px;
+}
+.tip{
+	display:inline-block;
+	width:245px;
+	height:45px;
+	background:url(images/tip.png) no-repeat;
+	vertical-align:middle;
+}
+.comment{
+	color:#F8710E;
+	background:none;
+}

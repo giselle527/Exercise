@@ -1,0 +1,62 @@
+/*css reset*/
+h3,ul,p,input{
+	margin:0;
+}
+h3,strong{
+	font-weight:normal;
+}
+ul{
+	padding:0;
+	list-style:none;
+}
+em{
+	font-style:normal;
+}
+
+.wrap{
+	width:500px;
+	border:5px solid #960d2f;
+	border-radius:15px;
+	margin:30px auto;
+	padding:0px 25px 0px 15px;
+	background:#F6F3F3;
+}
+h3{
+	font:bold 18px/40px "宋体";
+	border-bottom:2px solid #960d2f;
+}
+
+li{
+	font:15px/30px "宋体";
+	border-bottom:2px dotted #C1C1C1;
+}
+li:nth-of-type(5){
+	border-bottom:none;
+}
+li input{
+	float:left;
+	margin:7px 8px 0 10px;
+}
+li em{
+	float:left;
+}
+li strong{
+	float:right;
+	margin-right:5px;
+}
+
+p{
+	border-top:2px solid #960d2f;
+	font:15px/35px "宋体";
+	padding-left:10px;
+}
+p span{
+	margin-left:8px;
+}
+
+
+.clearfix:after{
+	content:"";
+	display:block;
+	clear:both;
+}
