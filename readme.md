@@ -2,6 +2,29 @@ readme
 =
 
 ---
+
+## changedivposition
+
+### changedivposition.html
+
+**介绍**
+
+自动生成一排div，点击document，div向下落，再点击，div向上升。
+
+**主要知识点**
+
+定时器
+    
+**新需求**  
+  
+最后一个div落或升完成后，再次点击document才有效，否则点击无效。
+
+### changedivpositionv1.html
+  
+**说明**
+  
+功能同上，满足需求“最后一个div落或升完成后，再次点击document才有效，否则点击无效”。
+  
 ## changepic
   
 **介绍**
