@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>抖抖更健康</title>
+		<style>
+			#wrap{
+				width:560px;
+				margin:0 auto;
+				position:relative;
+			}
+			img{
+				width:100px; 
+				height:100px; 
+				position:absolute; 
+				top:200px;
+			}
+		</style>
+		<script src="tools.js"></script>
+	</head>
+
+	<body>
+		<div id="wrap">
+			<img src="img/0.png" />
+			<img src="img/1.png" />
+			<img src="img/2.png" />
+			<img src="img/3.png" />
+			<img src="img/4.png" />
+		</div>
+	</body>
+
+	<script>
+		var wrap = document.getElementById('wrap');
+		var aImg = wrap.getElementsByTagName('img');
+		
+		for ( var i=0; i<aImg.length; i++ ) {
+			aImg[i].style.left = 10+i*110 + 'px';			
+			aImg[i].onmouseover = function () {
+				shake( this, 'top' );
+			};
+		}
+	</script>
+</html>
