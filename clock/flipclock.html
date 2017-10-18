@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>上翻时钟</title>
+	<style>
+		ul,li{
+			list-style:none;
+			margin:0;
+			padding:0;
+			font-size:0;
+		}
+		.list{
+			width:500px;
+			height:86px;
+			margin:50px auto;
+			overflow:hidden;
+		}
+		li{
+			display:inline-block;
+			width:61px;
+			position:relative;
+			top:0px;
+		}
+		img{
+			width:61px;
+			height:86px;
+			vertical-align:top;
+		}
+	</style>
+</head>
+<body>
+	<ul class="list">
+		<li>
+			<img src="img/0.JPG">
+			<img src="img/0.JPG">
+		</li>
+		<li>
+			<img src="img/0.JPG">
+			<img src="img/0.JPG">
+		</li>
+		<li>
+			<img src="img/colon.JPG">
+			<img src="img/colon.JPG">
+		</li>
+		<li>
+			<img src="img/0.JPG">
+			<img src="img/0.JPG">
+		</li>
+		<li>
+			<img src="img/0.JPG">
+			<img src="img/0.JPG">
+		</li>
+		<li>
+			<img src="img/colon.JPG">
+			<img src="img/colon.JPG">
+		</li>
+		<li>
+			<img src="img/0.JPG">
+			<img src="img/0.JPG">
+		</li>
+		<li>
+			<img src="img/0.JPG">
+			<img src="img/0.JPG">
+		</li>
+	</ul>
+	<script>
+		var oList = document.getElementsByClassName("list")[0];
+		var aLi = oList.getElementsByTagName("li");
+		var oImg2 = aLi[2].getElementsByTagName("img")[0];
+		var oImg5 = aLi[5].getElementsByTagName("img")[0];
+
+		//初始化
+		newT();
+		nextT();
+		var nT = nowT();//在这里，nT和newT/nextT出来的时间是一样的
+
+		var onoff = false;
+		var outT = null;
+
+		outT = setInterval(function(){
+			var neT = nextT();
+			var arr = differT(nT,neT);//arr存储的是上下不同的时间位置和值
+			var innerT = null;
+			innerT = setInterval(function(){
+				for(var i=0;i<arr.length;i++){
+					var top = getStyle( aLi[ arr[i][0] ],"top" );
+					aLi[ arr[i][0] ].style.top = (top - 3) + "px";//-3这里可以调节快慢
+					if( top<= -86 ){//86是一张图片的高度
+						aLi[ arr[i][0] ].style.top = 0;
+						var oImg = aLi[ arr[i][0] ].getElementsByTagName("img")[0];
+						oImg.src = "img/"+ arr[i][1] +".JPG";
+						clearInterval( innerT );
+						nT = neT;//这一步很关键
+					}
+				}
+			},16);
+
+			if(onoff){
+				oImg2.src = "img/colon.JPG";
+				oImg5.src = "img/colon.JPG";
+			}else{
+				oImg2.src = "img/none.JPG";
+				oImg5.src = "img/none.JPG";
+			}
+			onoff = !onoff;
+
+		},1000)
+		
+		document.onclick = function(){
+			clearInterval( outT );
+		}
+		
+		//给第一排img添加图片地址，让其显示调用newT函数时的时间
+		function newT(){
+			var time = nowT();
+			for(var i=0; i<aLi.length; i++){
+				var aImg = aLi[i].getElementsByTagName("img");
+				if(i == 2 || i == 5){
+					aImg[0].src = "img/colon.JPG";
+				}else{
+					aImg[0].src = "img/"+ time.charAt(i) +".JPG";
+				}
+			}
+			return time;
+		}
+
+		//给第二排img添加图片地址，让其显示调用nextT函数时的时间
+		function nextT(){
+			var time = nowT();
+			for(var i=0; i<aLi.length; i++){
+				var aImg = aLi[i].getElementsByTagName("img");
+				if(i == 2 || i == 5){
+					aImg[1].src = "img/none.JPG";
+				}else{
+					aImg[1].src = "img/"+ time.charAt(i) +".JPG";
+				}
+			}
+			return time;
+		}
+
+		//比较字符串t0和字符串t1的每一位，将第i位和t1的第i位的值以数组形式存入数组arr
+		//返回数组arr
+		function differT(t0,t1){
+			var arr=[];
+			for(var i=0;i<t0.length;i++){
+				if( t0.charAt(i) != t1.charAt(i) ){
+					arr.push([i,t1.charAt(i)]);
+				}
+			}
+			return arr;
+		}
+
+		//获取当前时间 时:分:秒
+		//返回字符串类型的xx:xx:xx
+		function nowT(){
+			var t = new Date();
+			var h = t.getHours();
+			var min = t.getMinutes();
+			var sec = t.getSeconds();
+			var time = add0(h) + ":" + add0(min) + ":" + add0(sec);
+			return time;
+		}
+
+		//补0
+		//返回两位数字符串
+		function add0(n){
+			return n<10 ? "0"+n : ""+n;
+		}
+
+		//获取obj元素的attr属性值，并将该值转换为数字
+		//返回该数字
+		function getStyle( obj,attr ){
+			return parseInt( getComputedStyle ? getComputedStyle(obj)[attr] : obj.currentStyle[attr] );
+		}
+
+	</script>
+	
+</body>
+</html>

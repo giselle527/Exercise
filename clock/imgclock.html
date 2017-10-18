@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>图片时钟</title>
+	<style>
+		ul,li{
+			list-style:none;
+			margin:0;
+			padding:0;
+			font-size:0;
+		}
+		.list{
+			width:500px;
+			margin:50px auto;
+		}
+		li{
+			display:inline-block;
+		}
+		img{
+			width:61px;
+			height:86px;
+			vertical-align:top;
+		}
+	</style>
+</head>
+<body>
+	<ul class="list">
+		<li><img src="img/0.JPG"></li>
+		<li><img src="img/0.JPG"></li>
+		<li><img src="img/colon.JPG"></li>
+		<li><img src="img/0.JPG"></li>
+		<li><img src="img/0.JPG"></li>
+		<li><img src="img/colon.JPG"></li>
+		<li><img src="img/0.JPG"></li>
+		<li><img src="img/0.JPG"></li>
+	</ul>
+	<script>
+		var oList = document.getElementsByClassName("list")[0];
+		var aImg = oList.getElementsByTagName("img");
+
+		var onoff = false;
+		
+		newT();
+		setInterval(function(){
+			newT();
+			if(onoff){
+				aImg[2].src = "img/colon.JPG";
+				aImg[5].src = "img/colon.JPG";
+			}else{
+				aImg[2].src = "img/none.JPG";
+				aImg[5].src = "img/none.JPG";
+			}
+			onoff=!onoff;
+
+		},1000);
+
+		function newT(){
+			var time = nowT();
+			for(var i=0; i<aImg.length; i++){
+				if(i == 2 || i == 5){
+					continue;
+				}
+				aImg[i].src = "img/"+ time.charAt(i) +".JPG";
+			}
+		}
+
+		function nowT(){
+			var t = new Date();
+			var h = t.getHours();
+			var min = t.getMinutes();
+			var sec = t.getSeconds();
+			var time = add0(h) + ":" + add0(min) + ":" + add0(sec);
+			return time;
+		}
+
+		function add0(n){
+			return n<10 ? "0"+n : ""+n;
+		}
+
+	</script>
+	
+</body>
+</html>
