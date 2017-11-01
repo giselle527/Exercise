@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>随机产生整数</title>
+	</head>
+
+	<body>
+		<script>
+		//随机产生100个从0-100之间不重复的整数
+		var arr = [];
+		var str = "";
+		var onoff = true;//利用开关排除重复数字
+
+		for( var i=0; i<500; i++ ){
+
+			str = Math.round( Math.random()*100 );//随机产生0-100之间的整数
+
+			for (var j=0;j<arr.length;j++){
+				if( str == arr[j] ){
+					onoff = false;
+					break;
+				}else{
+					onoff = true;
+				};
+			}
+			if( onoff ){
+				arr.push( str );
+			};
+			if( arr.length == 100 ){//控制生成的数组的长度
+				break;
+			}
+			
+		    
+		}
+		console.log( arr );
+
+		</script>
+
+
+	</body>
+</html>

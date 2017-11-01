@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>导航按钮</title>
+	<style>
+		body{ 
+			background:#eff0f2;
+		}
+		#menu{
+			width:50px;
+			height:50px;
+			position:fixed;
+			right:150px; 
+			bottom:150px; 
+		}
+		.m_list{
+			height:42px;
+			width:42px; 
+			margin:4px;
+			position:relative;
+		}
+		.m_list img{ 
+			border-radius:50%;
+			position:absolute;
+			left:0;
+			top:0;
+		}
+		.m_home{
+			width:50px;
+			height:50px;
+			background:url(img/home.png) no-repeat; 
+			border-radius:50%; 
+			transition:1s;
+			position:absolute; 
+			left:0;
+			top:0;
+		}
+
+	</style>
+</head>
+<body>
+	<div id="menu">
+		<div class="m_list">
+	    	<img src="img/prev.png" alt=""/>
+	        <img src="img/open.png" alt="" />
+	        <img src="img/close.png" alt="" />
+	        <img src="img/full.png" alt="" />
+	        <img src="img/refresh.png" alt="" />
+	    </div>
+		<div class="m_home"></div>
+	</div>
+	<script>
+		var oMenu = document.getElementById( "menu" );
+		var aImg = oMenu.getElementsByTagName( "img" );
+		var oHome = document.getElementsByClassName( "m_home" )[0];
+
+		var iR = -150;//斜边长度
+
+		var honoff = true;//控制home的旋转方向
+
+		oHome.onclick = function(){
+
+			if( honoff ){
+
+				this.style.transform = ' rotate(-360deg) ';//逆时针旋转
+
+				for( var i=0; i<aImg.length; i++){
+
+					var olt = countLT( iR,90/aImg.length*i );//参数分别是斜边长度和角度
+
+					aImg[i].style.transition = " 0.5s " + i*100 + "ms";
+					//transition: 运动时间   延迟时间  运动样式   运动形式 ; ms数是延迟时间
+					aImg[i].style.left = olt.l + "px";
+					aImg[i].style.top = olt.t + "px";
+					aImg[i].style.transform = ' scale(1) rotate(-720deg) ';
+
+				}
+			}else{
+				this.style.transform = ' rotate(0deg) ';//顺时针旋转
+
+				for( var i=0; i<aImg.length; i++){
+					aImg[i].style.transition = " 0.5s " + (aImg.length-i-1)*100 + "ms";
+					//left/top统一恢复到0，就不需要countLT了。要想最后一个img最先回来，只需要改一下transition的延迟时间
+					aImg[i].style.left = 0;
+					aImg[i].style.top = 0;
+					aImg[i].style.transform = ' scale(1) rotate(0deg) ';
+
+				}
+			}
+			honoff=!honoff;
+		}
+
+		for( var i=0;i<aImg.length;i++ ){
+			aImg[i].onclick = function(){
+				this.style.transform = "scale(1.5)  rotate(-720deg)";
+				this.style.opacity = "0.5";
+				this.style.transition = "0.2s";
+				addEnd( this,end );
+			}
+
+		}
+
+		function end(){
+			this.style.transform = "scale(1)  rotate(-720deg)";
+			this.style.opacity = "1";
+			this.style.transition = "0.1s";
+			removeEnd( this,end );
+		}
+
+
+		//求对边(left值)和邻边(top值)长度
+		//角度转弧度公式： 角度/180 x π
+		function countLT( iR,iDeg ){
+			var iLeft = Math.round( Math.sin( iDeg/180*Math.PI )*iR );
+			var iTop = Math.round( Math.cos( iDeg/180*Math.PI )*iR );
+			return { l:iLeft,t:iTop };
+		}
+
+		// 启用过渡完成事件transitionend事件
+		function addEnd( obj,fn ){
+		    obj.addEventListener('webkitTransitionEnd',fn,false);//兼容chrome
+		    obj.addEventListener('transitionend',fn,false);//标准下
+		}
+
+		// 删除过渡完成事件transitionend事件
+		function removeEnd( obj,fn ){
+		    obj.removeEventListener('webkitTransitionEnd',fn,false);//兼容chrome
+		    obj.removeEventListener('transitionend',fn,false);//标准下
+		}
+
+	</script>
+</body>
+</html>

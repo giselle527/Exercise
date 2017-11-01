@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>获取可视区域信息</title>
+	<style>
+		body{
+		  margin:0;
+		}
+		#div0{
+		  width:150px;
+		  height:150px;
+		  background:pink;
+		  position:relative;
+		  top:50px;
+		  left:200px;
+		}
+
+		#div1{
+		  width:60px;
+		  height:60px;
+		  background:yellow;
+		  position:absolute;
+		  left:0px;
+		  transition:1s;
+		}
+	</style>
+</head>
+<body>
+	<div id = "div0">
+		<div id = "div1"></div>
+	</div>
+	<script>
+		var div1 = document.getElementById( "div1" );
+
+		document.onclick = function (){
+			var left = div1.getBoundingClientRect().left;//注意这里的left是元素到可视区左侧的距离
+			console.log( left );
+			div1.style.left = - left + "px";//这里的left成了元素的left值，是相对父级定位元素而言的
+		}
+	</script>
+</body>
+</html>

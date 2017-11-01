@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>时钟</title>
+		<style>
+			.wrap{
+				width:200px;
+				height:200px;
+				border:5px solid #7a4b2f;
+				border-radius:50%;
+				background:url(img/back.png) no-repeat;
+				margin:50px auto;
+				position:relative;
+
+			}
+			.wrap ul{
+				margin:0;
+				padding:0;
+				list-style:none;
+				height:200px;
+				position:relative;
+			}
+			.wrap ul li{
+				width:2px;
+				height:6px;
+				background:#85b7d8;
+				position:absolute;
+				top:0px;
+				left:99px; /* 居中，因为width是2px，ul的width为200px */
+				transform-origin:center 100px;
+				/* 钟表的第1个指针是在top为0px,left为99px的位置，它围绕wrap的中心点位置旋转，即相对于它自身而言，旋转原点是x轴center,y轴100px，其他指针都是从第1个指针的位置开始旋转的，同理 */
+			}
+			.hour{
+				width:10px;
+				height:45px;
+				background:url(img/hour.png) no-repeat;
+				position:absolute;
+				left:95px;
+				top:55px;
+			}
+			.min{
+				width:8px;
+				height:65px;
+				background:url(img/min.png) no-repeat;
+				position:absolute;
+				left:96px;
+				top:35px;
+
+			}
+			.sec{
+				width:4px;
+				height:80px;
+				background:url(img/sec.png) no-repeat;
+				position:absolute;
+				left:98px;
+				top:20px;
+
+			}
+			/*时针、分针、秒针的起点都在wrap的中心点（100px,100px）*/
+			.hour,.min,.sec{
+				transform-origin:center bottom;
+			}
+			.icon{
+				width:14px;
+				height:14px;
+				background:#b20405;
+				border-radius:50%;
+				position:absolute;
+				left:93px;
+				top:93px;
+			}
+
+		</style>
+	</head>
+	<body>
+		<div class="wrap">
+			<ul>
+				<!-- <li></li> -->
+			</ul>
+			<div class="hour"></div>
+			<div class="min"></div>
+			<div class="sec"></div>
+			<div class="icon"></div>
+
+		</div>
+
+		<script>
+			var wrap = document.getElementsByClassName("wrap")[0];
+			var oUl = wrap.getElementsByTagName("ul")[0];
+
+			var oH = wrap.getElementsByClassName("hour")[0];
+			var oMin = wrap.getElementsByClassName("min")[0];
+			var oSec = wrap.getElementsByClassName("sec")[0];
+
+			// 自动生成页面上的指针
+			// 方法二的性能优于方法一
+			// 
+			// // 方法一
+			// for (var i=0; i<60; i++){
+			// 	var li = document.createElement( "li" );
+			//     li.style.transform = " rotate("+ 6*i +"deg) ";
+			//     if( i%5 == 0 ){
+			//     	li.style.height = "10px";
+			//     	li.style.background = "black";
+			//     }
+
+			//     oUl.appendChild( li );
+			// }
+
+			// 方法二
+			var str = "";
+			for(var i=0; i<60; i++){
+				
+				if( i%5 ){
+					str += '<li style="transform:rotate('+ i*6 +'deg);"></li>';
+				}else{
+					str += '<li style="transform:rotate('+ i*6 +'deg); background:black; height:10px;"></li>';
+				}
+			}
+			oUl.innerHTML = str;
+			
+			runTime();
+			setInterval(runTime,1000);
+
+			function runTime(){
+				var t = new Date();
+				var tSec = t.getSeconds();
+				var tMin = t.getMinutes() + tSec/60;
+				var tH = t.getHours() + tMin/60;
+				oSec.style.transform =" rotate("+ tSec*6 +"deg) ";
+				oMin.style.transform =" rotate("+ tMin*6 +"deg) ";
+				oH.style.transform =" rotate("+ tH*30 +"deg) ";//1圈360度12小时，1小时就是360/12=30度
+			}
+		</script>
+
+
+	</body>
+</html>

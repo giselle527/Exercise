@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>封装matrix方法</title>
+	<style>
+		#box{
+			width:100px;
+			height:100px;
+			background:pink;
+			margin:50px;
+			transition:1s;
+		}
+	</style>
+</head>
+<body>
+	<div id="box"></div>
+
+	<script>
+		var box = document.getElementById( "box" );
+		box.onclick = function(){
+			// toRotate(box,{ "scaleX":xScale, "scaleY":yScale, "translateX":xTrans, "translateY":yTrans, "rotateDeg":iDeg, "xSkewDeg":xDeg, "ySkewDeg":yDeg });		
+			jsMatrix( box,{ "ySkewDeg":90  } );		
+			
+		}
+
+		function jsMatrix(obj,{ "scaleX":xScale, "scaleY":yScale, "translateX":xTrans, "translateY":yTrans, "rotateDeg":iDeg, "xSkewDeg":xDeg, "ySkewDeg":yDeg }){
+
+		 	//保留2位小数的方法：先*100，四舍五入后，再/100
+		 	
+		 	// //旋转rotate赋值
+		 	// var a=Math.round(Math.cos(iDeg/180*Math.PI)*100)/100;
+		 	// var b=Math.round(Math.sin(iDeg/180*Math.PI)*100)/100;
+		 	// var c=-b;
+		 	// var d=a;
+		 	// var e=f=0;
+		 	// //旋转rotate赋值
+		 	
+
+		 	//斜切skew赋值
+		 	if(xDeg){
+		 		var c=Math.round( Math.tan(yDeg/180*Math.PI)*100 )/100;
+		 		xDeg == 90 ? c=100:c=c;
+		 		xDeg == -90 ? c=-100:c=c;
+		 	}else{
+		 		var c=0;
+		 	}
+		 	if(yDeg){
+		 		var b=Math.round( Math.tan(yDeg/180*Math.PI)*100 )/100;
+		 		yDeg == 90 ? b=100:b=b;
+		 		yDeg == -90 ? b=-100:b=b;
+		 	}else{
+		 		var b=0;
+		 	}
+		 	var a=d=1;
+		 	var e=f=0;
+		 	//斜切skew赋值
+		 	
+
+		 	// //缩放scale赋值
+		 	// var a=xScale*1;
+		 	// var d=yScale*1;
+		 	// var b=c=e=f=0;
+		 	// //缩放scale赋值
+		 	
+
+		 	// //位移skew赋值
+		 	// var e=xTrans;
+		 	// var f=yTrans;
+		 	// var a=d=1;
+		 	// var b=c=0;
+		 	// //位移skew赋值
+		 	 
+
+		 	// console.log( "matrix("+a+","+b+","+c+","+d+","+e+","+f+")" );
+
+		 	obj.style.WebkitTransform="matrix("+a+","+b+","+c+","+d+","+e+","+f+")";
+		 	obj.style.MozTransform="matrix("+a+","+b+","+c+","+d+","+e+","+f+")";
+		 	obj.style.transform="matrix("+a+","+b+","+c+","+d+","+e+","+f+")";
+		 	obj.style.filter="progid:DXImageTransform.Microsoft.Matrix( M11="+a+", M12= "+c+", M21= "+b+" , M22="+d+",SizingMethod='auto expand')";
+		}
+
+
+
+
+	</script>
+</body>
+</html>
