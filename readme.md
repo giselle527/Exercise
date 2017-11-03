@@ -2,6 +2,56 @@ readme
 =
 
 ---
+## 3d
+       
+### 3drotate
+   
+**介绍**
+             
+利用CSS3搭建3d环境，实现旋转图片的立体效果。
+
+### 3dshowhide
+   
+**介绍**
+             
+3d样式配合动画实现折纸动画效果。
+
+### 3dswitchpic
+   
+**介绍**
+             
+3d样式配合动画实现动态切换图片效果。
+
+
+## dancegirl
+       
+### danceGirl
+   
+**介绍**
+             
+运用定时器移动背景图。
+
+### danceGirlv1
+   
+**介绍**
+             
+运用定时器移动内圆背景图，定时器停止后让其进行3d旋转。
+
+
+## hexagon
+       
+**介绍**
+        
+立体六边形
+      
+**主要知识点**
+       
+perspective 景深，即站到多远之外来看这个元素，近大远小
+perspective-origin 景深基点，指视线从哪个方向看过去，默认是center center
+transform-origin  变换基点
+transform-style:preserve-3d; 搭建3D环境
+找准每个面的旋转轴和角度
+解决第6个面覆盖第3个面和旋转之后倒立的方法：translateZ(-100px) rotateX(180deg)
 
 ## jsMatrix
      

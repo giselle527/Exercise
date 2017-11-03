@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>动态切换图片</title>
+	<style>
+		@-webkit-keyframes show{
+			0%{
+				transform:rotateX(180deg);
+				opacity:0;
+			}
+			70%{
+				transform:rotateX(-15deg);
+				opacity:1;
+			}
+			80%{
+				transform:rotateX(10deg);
+
+			}
+			90%{
+				transform:rotateX(-5deg);
+
+			}
+			100%{
+				transform:rotateX(0deg);
+
+			}
+		}
+		@-webkit-keyframes hide{
+			0%{
+				transform:rotateX(0deg);
+				opacity:1;
+			}
+			100%{
+				transform:rotateX(-180deg);
+				opacity:0;
+			}
+		}
+		#wrap{
+			width:400px;
+			height:300px;
+			margin:20px auto;
+			position:relative;
+			perspective:800px;
+			transform-style:preserve-3d;
+		}
+		img{
+			width:400px;
+			height:300px;
+			border-radius:20px;
+			transform-origin:bottom;
+			opacity:0;
+			position:absolute;
+			left:0;
+			top:0;
+		}
+		.show{
+			transform:rotateX(0deg);
+			opacity:1;
+			-webkit-animation:1s show;
+		}
+		.hide{
+			transform:rotateX(180deg);
+			opacity:0;
+			-webkit-animation:0.5s hide;
+		}
+
+		#wrap input{
+			width:50px;
+			height:50px;
+			margin:0;
+			padding:0;
+			background:#8e756e;
+			color:#fae7d6;
+			font:30px/40px Arial;
+			border-radius:50%;
+			border:none;
+			outline:none;
+			position:absolute;
+			top:110px;
+		}
+		#wrap input:nth-of-type(1){
+			left:-90px;
+		}
+		#wrap input:nth-of-type(2){
+			right:-90px;
+		}
+	</style>
+</head>
+<body>
+	<div id="wrap">
+		<input type="button" value="<">
+		<input type="button" value=">">
+		<img src="img/30.jpg" class="show"/>
+		<img src="img/31.jpg" />
+		<img src="img/32.jpg" />
+		<img src="img/33.jpg" />
+
+	</div>
+	<script>
+		var oWrap = document.getElementById( "wrap" );
+		var aInp = oWrap.getElementsByTagName( "input" );
+		var aImg = oWrap.getElementsByTagName( "img" );
+
+		var iNow = 0;
+		aInp[1].onclick = function(){
+			aImg[iNow].className = "hide";
+			iNow++;
+			if(iNow>=aImg.length){iNow=0};
+			aImg[iNow].className = "show";
+		}
+		aInp[0].onclick = function(){
+			aImg[iNow].className = "hide";
+			iNow--;
+			if(iNow<=0){iNow=aImg.length-1};
+			aImg[iNow].className = "show";
+		}
+	</script>
+	
+</body>
+</html>

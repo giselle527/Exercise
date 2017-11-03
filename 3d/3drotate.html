@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>3D旋转</title>
+	<style id="css">
+		body,ul,ol{
+			margin:0;
+			padding:0;
+		}
+		li{
+			list-style:none;
+		}
+		#wrap{
+			width:800px;  /* 图片大小是800x360 */
+			margin:100px auto;
+		}
+		.picList{
+			width:800px;
+			height:360px;
+			perspective:800px;
+		}
+		.picList li{
+			width:20px;
+			height:360px;
+			transform-style: preserve-3d;
+			transform-origin:center center -180px;
+			/*变换基点x轴y轴都是中心点，z轴是厚度的一半，即-180px*/
+			transition:1s;
+			position:relative;
+			float:left;
+
+		}
+		.picList li a{
+			width:100%;
+			height:100%;
+			position:absolute;
+			left:0;
+			top:0;
+		}
+		.picList li a:nth-of-type(1){
+			background:url(img/0.jpg) no-repeat;
+		}
+		.picList li a:nth-of-type(2){
+			background:url(img/1.jpg) no-repeat;
+/*			transform-origin:top;
+			transform:rotateX(-90deg);*/
+			/* ↑这段样式旋转后，图片是倒着的，下同*/
+			top:-360px;
+			transform-origin:bottom;
+			transform:rotateX(90deg);
+		}
+		.picList li a:nth-of-type(3){
+			background:url(img/2.jpg) no-repeat;
+			transform:translateZ(-360px) rotateX(180deg);
+			/*rotateX(180deg)是为了解决图片倒着显示的问题*/
+		}
+		.picList li a:nth-of-type(4){
+			background:url(img/3.jpg) no-repeat;
+/*			transform-origin:bottom;
+			transform:rotateX(90deg);*/
+			top:360px;
+			transform-origin:top;
+			transform:rotateX(-90deg);
+		}
+
+/*		.picList:hover li{
+			transform:rotateX(-270deg);
+		}*/
+		/* ↑用来测试旋转时图片显示是否正常*/
+
+		.picList li span{
+			width:360px;
+			height:360px;
+			background:#333;
+			position:absolute;
+		}
+		.picList li span:nth-of-type(1){
+			transform-origin:left;
+			transform:rotateY(90deg);
+			left:0;
+		}
+		.picList li span:nth-of-type(2){
+			transform-origin:right;
+			transform:rotateY(-90deg);
+			right:0;
+		}
+
+		.btns{
+			/*块元素宽度继承父级为800px*/
+			float:right;
+			padding:10px 0;
+			/* padding用来控制li的上下间隔 */
+		}
+		.btns li{
+			width:40px;
+			height:40px;
+			background:pink;
+			border-radius:50%;
+			font:30px/40px Arial;
+			text-align:center;
+			float:left;
+			margin:0 5px;
+			/* margin用来控制li的左右间隔 */
+		}
+		.btns .active{
+			background:#72F7F6;
+		}
+
+		/*.picList li:nth-of-type(1) a{background-position:-50px 0;}*/
+		/*.picList下，一个li就是一个四面体，要改变的是每个li的背景图的位置，以拼成一张完整的图片*/
+		/*每个li的每个面用的是不一样的图，但图片大小一样，所以每个面的图片位置是一样的*/
+	</style>
+</head>
+<body>
+	<div id="wrap">
+		<ul class="picList">
+			<li>
+				<a href="#"></a>
+				<a href="#"></a>
+				<a href="#"></a>
+				<a href="#"></a>
+				<span></span>
+				<span></span>
+			</li>
+		</ul>
+		<ol class="btns">
+			<li class="active">1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+		</ol>
+	</div>
+	<script>
+		var wrap = document.getElementById( "wrap" );
+		var oCss = document.getElementById( "css" );
+		var oPicList = wrap.getElementsByClassName( "picList" )[0];
+		var oBtns = wrap.getElementsByClassName( "btns" )[0];
+		var aBtns = oBtns.getElementsByTagName( "li" );
+		var aLi = null;
+
+		var sLi = "";
+		var sCss = "";
+		var iLiw = 20; //一个li的宽度
+		var iZindex = 0; 
+		var iNow =0; //记录点击了第几个按钮
+		var iLength = oPicList.clientWidth / iLiw ; //要生成iLength个li
+
+		for(var i=0;i<iLength;i++){
+			i>iLength/2 ? iZindex-- : iZindex++ ;
+			//控制li的层级，景深默认是从中心点看，看左边主要看到的是右面；看右边主要看到的是左面，过了中心点后，如果不使右面的层级更高，就会显示左面
+			sLi+=' <li><a href="#"></a><a href="#"></a><a href="#"></a><a href="#"></a><span></span><span></span></li> ';
+			sCss+=' .picList li:nth-of-type(' + (i+1) + ') a{background-position:-'+ i*iLiw +'px 0;} ';
+			sCss+=' .picList li:nth-of-type(' + (i+1) + '){z-index:'+ iZindex +';} ';
+		}
+		oPicList.innerHTML = sLi;
+		oCss.innerHTML += sCss;
+		aLi = oPicList.children;
+
+		//运用匿名函数自执行，使得i值不变改变
+		for(var i=0;i<aBtns.length;i++){
+			( function(a){
+				aBtns[a].onclick = function(){
+					for(var i=0;i<aLi.length;i++){
+						aLi[i].style.transition = "0.5s "+i*30+"ms";//利用延迟时间让肉眼看到依次旋转效果
+						aLi[i].style.WebkitTransform = " rotateX(-"+a*90+"deg) ";
+					}
+					aBtns[iNow].className="";
+					this.className="active";
+					iNow=a;
+				}
+			})(i);
+		}
+
+
+	</script>
+	
+</body>
+</html>

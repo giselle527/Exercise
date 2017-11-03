@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>跳舞的女孩</title>
+		<style>
+			#wrap{
+				width:300px;
+				height:300px;
+				padding:50px;
+				margin:30px auto;
+				border:5px solid #622e21;
+				border-radius:50%;
+				background:url(pic0.jpg) no-repeat;
+				opacity:0.9; /* 当opacity为1时，旋转的是半圆 */
+				background-size:contain;
+				background-clip:padding-box;
+				transform-style:preserve-3d;
+				perspective: 800px;
+			}
+			.cont{
+				width:300px;
+				height:300px;			
+				border-radius:50%;
+				background:url(pic0.jpg) no-repeat;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div class="cont"></div>
+		</div>
+		<script>
+			var wrap = document.getElementById("wrap");
+			var oCont = wrap.getElementsByClassName("cont")[0];
+
+			var num = 0;
+			var timer = null;
+
+			danceGirl();
+			timer=setInterval(danceGirl,16);
+			document.onclick = function(){
+				clearInterval(timer);
+			}
+
+			function danceGirl(){
+				num+=-0.5;
+				if(num<=-200){
+					clearInterval(timer);
+					rotateGirl();
+				}
+				
+				oCont.style.backgroundPosition = num+"px "+num+"px";
+			}
+
+			function rotateGirl(){
+				oCont.style.transition = "5s";
+				oCont.style.transform = "rotateY(360deg)";
+			}
+
+
+
+		</script>
+		
+	</body>
+</html>
