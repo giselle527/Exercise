@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>rundiv</title>
+	<style>
+		#move{
+			width:100px;
+			height:100px;
+			background:pink;
+			position:absolute;
+			top:200px;
+			left:100px;
+		}
+	</style>
+</head>
+<body>
+
+	<div id="move"></div>
+	<script>
+		var oMove = document.getElementById( "move" );
+		var dirl = false; //left
+		var dirt = false; //top
+		var dirr = false; //right
+		var dirb = false; //bottom
+
+		var timer = null;
+
+		var i=0;
+
+		function run(){
+			timer = setInterval(function(){
+				i++;
+				if( dirl ){ oMove.style.left = oMove.offsetLeft - 10 + "px"; };
+				if( dirt ){ oMove.style.top = oMove.offsetTop - 10 + "px"; };
+				if( dirr ){ oMove.style.left = oMove.offsetLeft + 10 + "px"; };
+				if( dirb ){ oMove.style.top = oMove.offsetTop + 10 + "px"; };
+				document.title = i;
+			},16);
+		}
+
+		document.onkeydown = function(ev){
+			if( !timer ){//timer为null，才会运行run，避免连续开启定时器
+				run();
+			}
+			
+			var ev = ev || event;
+
+			switch( ev.keyCode ){
+				case 37:
+				dirl = true;
+				break;
+				case 38:
+				dirt = true;
+				break;
+				case 39:
+				dirr = true;
+				break;
+				case 40:
+				dirb = true;
+				break;
+				default:
+				clearInterval( timer );//按下的键不是上下左右键时，清除定时器
+				timer = null;
+
+			}
+		};
+
+		document.onkeyup = function(ev){
+
+			clearInterval( timer );
+			timer=null;
+
+			var ev = ev || event;
+			
+			switch( ev.keyCode ){
+				case 37:
+				dirl = false;
+				break;
+				case 38:
+				dirt = false;
+				break;
+				case 39:
+				dirr = false;
+				break;
+				case 40:
+				dirb = false;
+				break;
+
+			}
+		}
+	</script>
+	
+</body>
+</html>
