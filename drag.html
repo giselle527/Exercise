@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Drag</title>
+	<style>
+		#box{
+			width:100px;
+			height:100px;
+			background:pink;
+			border:5px solid red;
+			position:absolute;
+
+		}
+		#box1{
+			width:100px;
+			height:100px;
+			background:pink;
+			border:5px solid red;
+			position:absolute;
+			top:200px;
+		}
+	</style>
+</head>
+<body>
+	<div id="box"></div>
+	<div id="box1"></div>
+	<script>
+		var oBox = document.getElementById("box");
+		var oBox1 = document.getElementById("box1");
+
+		drag(oBox);
+		drag(oBox1);
+
+		function drag( obj ){
+			obj.onmousedown = function( ev ){
+
+				var ev = ev || event;
+				var disX = ev.clientX - this.offsetLeft;
+				var disY = ev.clientY - this.offsetTop;
+
+				document.onmousemove = function( ev ){
+					var ev = ev || event;
+
+					var L = ev.clientX - disX;
+					var T = ev.clientY - disY;
+
+					obj.style.left = L + "px";
+					obj.style.top = T + "px";
+				};
+
+				document.onmouseup = function(){
+					document.onmousemove = null;
+				};
+				return false;
+			}
+		}
+	</script>
+</body>
+</html>

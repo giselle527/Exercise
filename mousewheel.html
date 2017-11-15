@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>鼠标滚轮事件控制div</title>
+	<style>
+		body{
+			height:2000px;
+		}
+		#box{
+			width:100px;
+			height:100px;
+			background:pink;
+			margin:100px auto;
+		}
+	</style>
+</head>
+<body>
+	<div id="box"></div>
+	<script>
+		var box = document.getElementById("box");
+
+		box.onmousewheel = fn;//chrome和IE支持
+	
+		if( box.addEventListener ){//IE有些版本不支持addEventListener，不判断可能报错
+			box.addEventListener("DOMMouseScroll",fn,false);//火狐支持
+		}
+
+		
+		function fn( ev ){
+			var ev = ev || event;
+			
+			var b = true;
+
+			if( ev.wheelDelta ){//chrome和IE支持
+				b = ev.wheelDelta > 0 ? true : false;
+			};
+			if( ev.detail ){//火狐支持
+				b = ev.wheelDelta < 0 ? true : false;
+			}
+
+			if(b){
+				box.style.height = box.offsetHeight - 10 + "px";
+			}else{
+				box.style.height = box.offsetHeight + 10 + "px";
+			}
+			if( ev.preventDefault ){
+				ev.preventDefault();
+			}
+			return false;
+			
+		}
+
+	</script>
+</body>
+</html>

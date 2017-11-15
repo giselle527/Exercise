@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>改变元素大小</title>
+	<style>
+		#box{
+			width:100px;
+			height:100px;
+			background:pink;
+			border:5px solid red;
+			position:absolute;
+			top:100px;
+			left:500px;
+		}
+		#box1{
+			width:100px;
+			height:100px;
+			background:yellow;
+			border:5px solid red;
+			position:absolute;
+			top:100px;
+			left:100px;
+		}
+	</style>
+</head>
+<body>
+	<div id="box"></div>
+	<div id="box1"></div>
+	<script>
+		var oBox = document.getElementById("box");
+		var oBox1 = document.getElementById("box1");
+
+		size(oBox);
+		size(oBox1);
+
+		function size( obj ){
+			obj.onmousedown = function( ev ){
+
+				var ev = ev || event;
+				var downX = ev.clientX;
+				var downY = ev.clientY;
+
+				var offLeft = this.offsetLeft;
+				var offTop = this.offsetTop;
+				var offWidth = this.offsetWidth;
+				var offHeight = this.offsetHeight;
+
+				var dir;
+
+				if( downX > offLeft + offWidth -10 ){
+					dir = "right";
+				};
+
+				if( downX < offLeft + 10 ){
+					dir = "left";
+				};
+
+				if( downY > offTop + offHeight -10 ){
+					dir = "bottom";
+				};
+
+				if( downY < offTop + 10 ){
+					dir = "top";
+				};
+
+				document.onmousemove = function( ev ){
+					var ev = ev || event;
+					switch( dir ){
+						case "left":
+						obj.style.width = -(ev.clientX - downX) + offWidth + "px";
+						obj.style.left = (ev.clientX - downX) + offLeft + "px";
+						break;
+						case "right":
+						obj.style.width = (ev.clientX - downX) + offWidth + "px";
+						break;
+						case "top":
+						obj.style.height = -(ev.clientY - downY) + offHeight + "px";
+						obj.style.top = (ev.clientY - downY) + offTop + "px";
+						break;
+						case "bottom":
+						obj.style.height = (ev.clientY - downY) + offHeight + "px";
+						break;
+					}
+				}
+				document.onmouseup = function(){
+					document.onmousemove = document.onmouseup = null;
+				};
+				return false;
+			}
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>模拟滚动条</title>
+	<style>
+			#wrap{
+				width:15px;
+				height:400px;
+				background:#06CD6B;
+				border-radius:25px;
+				position:absolute;
+				top:50px;
+				left:800px;
+			}
+			.bar{
+				width:15px;
+				height:30px;
+				background:pink;
+				border-radius:5px;
+				position:absolute;
+				top:0px;
+				left:0px;
+			}
+			#cont{
+				width:300px;
+				height:390px;
+				border:5px solid red;
+				border-radius:15px;
+				position:absolute;
+				top:50px;
+				left:445px;
+			}
+			.box{
+				height:360px;
+				margin:15px 10px 15px 15px;
+				position:relative;
+				overflow:hidden;
+			}
+			.word{
+				margin:0;
+				padding:0;
+				position:absolute;
+				left:0;
+				top:0;
+
+			}
+		</style>
+	</style>
+</head>
+<body>
+	<div id="wrap">
+		<div class="bar"></div>
+	</div>
+	<div id="cont">
+		<div class="box">
+			<p class="word">
+				人生需要规划，尤其是在25岁之后，如果还拎不清，胡里糊涂的，那么你明白的就太迟了。
+
+				　　请不要羡慕别人年纪轻轻，就拥有豪车别墅，也不要自责自己存款只有五位数，这一切只因为别人早就做了人生规划，而自己还弄不懂下面几件事：
+
+				　　关于未来
+
+				　　人生不存在一条既定的跑道
+
+				　　在教育孩子方面，我们都听过一句话：不让孩子输在起跑线上。这句话无形中给我们一种感觉，那就是人生是一场既定的跑道，看的见摸的着，我们都要在这个康庄大道或者是独木桥上奔跑。
+
+				　　事实上，人生道路不是谁都给自己定好的，它之间充满很多变数，关键是我们每个人的人生道路只能自己摸索，过自己喜欢的生活，走自己的路。
+
+				　　高考之前，我们每个人道路都是奔考名牌大学去的，我们上幼儿园、小学、中学，最后在高考这个考验面前，有的人通过了继续深造，有的人没有通过，早早走入了社会。
+
+				　　当大家都进入社会后，开始了迷茫，做什么样的工作，进什么样的公司，什么样的职业发展，这时，每个人都是面临一条条枝丫重生的道路。没有人能给你 准确回答，只能自己寻觅感觉。
+
+				　　关于生命
+
+				　　阅历是由生活的密度决定
+
+				　　我们总有一种错觉，认为越年老的人阅历越丰富，越年长者越智慧，其实这是错误的。
+
+				　　有的人越年长越糊涂，越执拗固执。有的经历大起大落的人，他们阅历越丰富，他们的情感经历越丰富，他们短短几年的经历，可能走过了别人一生都未完成的路。
+
+				　　我们不能说，阅历是由年龄决定的，只能说跟年龄有关系，但是由生活密度决定的。
+
+				　　关于安稳
+
+				　　体验多比享受安稳更有价值
+
+				　　人人都是向往安稳，这缘于人性的惰性和安全感。应届生一大学毕业，就急于考公务员，或者听从父母的安排，进大公司，他们求的不一定是多少钱，而是心理上的一种安稳舒适。
+
+				　　可是很少有人问自己，到底什么是自己喜欢的事，自己适合做什么事。刚毕业的年轻人不闯几年，不多多经历体验几次，是不知道自己到底喜欢什么，适合做什么。
+
+				　　关于金钱
+
+				　　实现财务自由，是要靠资产性收入
+
+				　　一个人收入分为两种：
+
+				　　一种是资产性收入，利用现有的资本本身带来的收益，如房租、股权分红、版税等
+
+				　　一种是劳动性收入，利用劳动报酬换来的收入
+
+				　　财务自由指的是不长期不劳动，也能有钱花。这个主要资产性收入，如果靠劳动性收入，一旦不劳动了，那么收入就没有了。
+
+				　　25岁之后，要让自己从劳动性收入过渡到资产性收入，投资理财也是一种资产性收入。
+			</p>
+		</div>
+	</div>
+	<script>
+		var wrap = document.getElementById("wrap");
+		var bar = wrap.getElementsByClassName("bar")[0];
+		var cont = document.getElementById("cont");
+		var box = cont.getElementsByClassName("box")[0];
+		var word = cont.getElementsByClassName("word")[0];
+
+		var str = word.innerHTML;
+		var newstr = str.replace(/\s/gi,'');//去除文中空格
+
+		word.innerHTML = newstr;
+
+		bar.onmousedown = function( ev ){
+			var ev = ev || event;
+			var disT = ev.clientY -this.offsetTop;
+			var disMax = wrap.clientHeight - this.offsetHeight;
+
+			document.onmousemove = function( ev ){
+				var ev = ev || event;
+				var T = ev.clientY - disT;
+				if(T<0){
+					T=0;
+				}else if(T>disMax){
+					T=disMax;
+				}
+
+				var scale = T/disMax;
+				var wordMax = box.clientHeight - word.offsetHeight;
+
+				bar.style.top = T + "px";
+				word.style.top = scale * wordMax + "px";
+			};
+			document.onmouseup = function(){
+				document.onmousemove = document.onmouseup = null;
+			}
+		}
+	</script>
+	
+</body>
+</html>

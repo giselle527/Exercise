@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>民以食为天</title>
+	<style>
+		@font-face {
+		    font-family: "snowhill";
+		    src: url("fonts/snowhill/snowhill.eot"); /* IE9 */
+		    src: url("fonts/snowhill/snowhill.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
+		    
+		    url("fonts/snowhill/snowhill.woff") format("woff"), /* chrome、firefox */
+		    url("fonts/snowhill/snowhill.ttf") format("truetype"), /* chrome、firefox、opera、Safari, Android, iOS 4.2+ */
+		    
+		    url("fonts/snowhill/snowhill.svg#snowhill") format("svg"); /* iOS 4.1- */
+		    font-style: normal;
+		    font-weight: normal;
+		}
+
+		#box{
+			width:400px;
+			height:400px;
+			margin:50px auto 0 auto;
+			padding-top:50px;
+			background:pink;
+			border-radius:20% 50%;
+			behavior: url("PIE.htc");
+			text-align:center;
+			position:relative;
+
+		}
+		#box h2{
+			margin:20px 0 30px 0;
+			font:2.5em/2.5em "华文行楷";
+		}
+		#box .cont{
+			margin:0;
+			padding:0;
+			font:bold 4em/1em "仿宋";
+		}
+		.change{
+			width:100px;
+			height:100px;
+			color:#4b8f78;
+			font:40px/78px "snowhill";
+			background:url(rice.png) no-repeat;
+			position:absolute;
+			right:-55px;
+			top:-10px;
+		}
+		.change:hover{
+			opacity:0.7;
+			filter:alpha(opacity=70);/*兼容IE*/
+		}
+
+	</style>
+</head>
+<body>
+	<div id="box">
+		<h2>今晚吃什么哩？</h2>
+		<p class="cont"></p>
+		<em class="change">换</em>
+	</div>
+
+	 <script>
+	 	//解决IE不能使用getElementsByClassName的问题
+	 	if(!document.getElementsByClassName){
+	 		document.getElementsByClassName = function(className, element){
+	 			var children = (element || document).getElementsByTagName('*');
+	 			var elements = new Array();
+	 			//定义一个空数组,用来存放所有class名为className的元素
+	 			for (var i=0; i<children.length; i++){
+	 				var child = children[i];
+	 				// console.log(child.className);//字符串：例"cont box"
+	 				var classNames = child.className.split(' ');
+	 				for (var j=0; j<classNames.length; j++){
+	 					if (classNames[j] == className){ 
+	 						elements.push(child);
+	 						break;
+	 					}
+	 				}
+	 			} 
+	 			return elements;
+	 		};
+	 	}
+
+	 	var arr=["粥","卷饼","麻辣烫","烤冷面"];
+	 	var x = arr.length-1;
+	 	var y = Math.round( Math.random()*x );
+
+	 	var oBox = document.getElementById("box");
+	 	var oP = document.getElementsByClassName("cont")[0];
+	 	var oChange = document.getElementsByClassName("change")[0];
+
+	 	oP.innerHTML = arr[y];
+
+	 	oChange.onclick = function(ev){
+	 		var ev = ev||event;
+	 		var z;
+	 		x = arr.length-1;
+	 		do{
+	 			z = Math.round( Math.random()*x );
+	 		}while(y==z);
+
+	 		oP.innerHTML = arr[z];
+	 		y=z;
+	 	}
+
+	 	if(document.all){
+	 	    document.onselectstart= function(){return false;}; //for ie
+	 	}else{
+	 	    document.onmousedown= function(){return false;};
+	 	    document.onmouseup= function(){return true;};
+	 	}
+
+
+	 </script>
+	
+</body>
+</html>
