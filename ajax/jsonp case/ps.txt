@@ -1,0 +1,8 @@
+跨域问题
+
+        “Access-Control-Allow-Origin”表示允许跨域访问
+          No 'Access-Control-Allow-Origin' header表示不允许跨域访问
+
+跨域访问的被请求方可以设置自己是否允许来自其他 domain 的跨域访问。
+
+ajax不能进行不被允许的跨域访问，但可以通过jsonp解决跨域问题。

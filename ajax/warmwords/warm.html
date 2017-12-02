@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>温暖的话</title>
+	<script src="ajax.js"></script>
+	<style>
+		.wrap{
+			width:600px;
+			margin:30px auto;
+			position:relative;
+		}
+
+		#btn{
+			width:50px;
+			height:50px;
+			color:#975A0A;
+			font:20px/50px "Times New Roman";
+			background:#91F6A7;
+			border:none;
+			outline:none;
+			border-radius:50% 30%;
+			position:absolute;
+			left:-60px;
+			top:0;
+		}
+
+		ul{			
+			padding:0;
+			margin:0 auto;
+			list-style:none;
+			color:#F21F07;
+			font:1.2em/1.5em "华文行楷";
+		}
+
+		ul span{
+			display:inline-block;
+			color:#07AFFC;
+			font:bold 0.8em/1.5em "仿宋";
+			margin-left:15px;
+		}
+
+
+	</style>
+</head>
+<body>
+	<!-- 要在服务器环境下才能看到效果 -->
+	<div class="wrap">
+		<input type="button" value="btn" id="btn">
+		<ul></ul>
+	</div>
+	<script>
+		var btn = document.getElementById("btn");
+
+		btn.onclick = function(){
+			ajax("get","getWarm.php","",function(data){
+				success(data);
+			});
+		}
+
+	</script>
+</body>
+</html>

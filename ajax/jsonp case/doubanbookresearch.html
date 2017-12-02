@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>搜索豆瓣图书</title>
+		<style>
+			ul{
+				padding:0;
+				margin:0;
+				list-style:none;
+			}
+			a{text-decoration:none;}
+			input{
+				outline:none;
+				border:none;
+			}
+
+			#wrap{
+				width:320px;
+				margin:30px auto;
+			}
+			/*搜索框*/
+			.text{
+				width:300px;
+				height:30px;
+				padding:10px;
+				font:16px/30px "宋体";
+				border:2px solid red;
+				border-radius:15px 15px 0 0;
+			}
+
+			.btn,.back{
+				width:50px;
+				height:50px;
+				border-radius:50px;
+				background:#0AF1F3;
+				color:#000;
+			}
+			/*查询按钮*/
+			.btn{
+				display:block;
+				margin:0 auto;
+			}
+			
+			/*ul列表*/
+			.list{
+				width:320px;
+				border-left:2px solid red;
+				border-right:2px solid red;
+				/*border-top:none;*/
+				display:none;
+			}
+			.list li{
+				border-top:5px dotted red;
+			}
+			.list li:nth-last-child(1){
+				border-bottom:2px solid red;
+			}
+			/*图书封面*/
+			.pic{
+				width:110px;
+				height:135px;
+				vertical-align:top;
+			}
+			/*图书信息*/
+			.intro{
+				float:right;
+				width:210px;
+				text-align:center;
+
+			}
+			/*书名*/
+			.title{
+				display:block;
+				width:210px;
+				height:40px;
+				white-space:nowrap;/* 让文字不换行 */
+				text-overflow:ellipsis;/* 显示省略号 */
+				overflow:hidden;/* 隐藏超出文字 */
+				color:#000;
+				font:bold 20px/40px "仿宋";
+				transition:1s;
+				margin:15px 0;
+			}
+			.title:hover{
+				font-size:22px;
+				color:red;
+			}
+
+			/*返回TOP按钮*/
+			.back{
+				line-height:50px;
+				text-align:center;
+				border-radius:50px;
+				position:fixed;
+				right:30px;
+				bottom:30px;
+				display:none;
+
+			}
+			
+		</style>
+	</head>
+	<body>
+			<div id="wrap">
+				<input type="text" class="text">
+				<input type="button" value="查询" class="btn">
+				<ul class="list">
+				<!--
+					<li>
+						<img class="pic" src="https://img3.doubanio.com/mpic/s3885793.jpg">
+						<div class="intro">
+							<a class="title" href="https://book.douban.com/subject/3864460/">《书名》</a>
+							<span class="author">张皛珏 著</span>
+						</div>
+					</li>
+			    -->					
+				</ul>
+				<a class="back" href="javascript:scroll(0,0)">TOP</a>
+			</div>
+
+			<!-- 
+			https://api.douban.com/v2/book/search?q=javascript&callback=fn&count=40&start=100
+			
+			豆瓣api解析：
+			q=javascript：javascript是要查的信息
+			callback=fn： fn是调用的函数名
+			count=40：40是要显示的图书条数
+			start=100： 从第100条图书信息开始显示
+			
+			数据分析：
+			books.title,string,书名
+			books.image,string,图片地址
+			books.alt,string豆瓣该书链接
+			books.author,[],作者
+
+			 -->
+
+			<script>
+				
+				var oText = document.getElementsByClassName("text")[0];
+				var oBtn = document.getElementsByClassName("btn")[0];
+				var oBack = document.getElementsByClassName("back")[0];
+				var oList = document.getElementsByClassName("list")[0];
+
+				var iPage = 0;   //控制加载的页数，直接决定了发送请求时的start值
+				var num = 5;     //每页显示的图书条数
+				var b = true;	 //开关，当加载图书时，b为false；加载完成之后为true。为true时，才能再次加载
+
+				oBtn.onclick = function(){
+					oList.innerHTML = "";
+					iPage = 0;
+					if(oText.value){
+						oList.style.display = "block";
+						loadBook();
+					}else{
+						alert("请输入正确的图书信息");
+					}
+				}
+
+				// 滚动条滚动时加载图书
+				window.onscroll = function(){
+					// getTop(oList)          oList到body的top值
+					// oList.offsetHeight     oList的高
+					// document.documentElement.clientHeight  可视区的高
+					// document.body.scrollTop||document.documentElement.scrollTop 滚动条滚动距离
+					// 当 oList到body的top值 + oList的高 < 可视区的高 + 滚动条滚动距离 时，就可以加载下一波图书了
+
+					oBack.style.display = "block";
+
+					var oList = document.getElementsByClassName("list")[0];
+
+					var scrollTop = document.body.scrollTop||document.documentElement.scrollTop; //滚动距离
+
+					if(!scrollTop){
+						oBack.style.display = "none";
+					}
+
+					if( getTop(oList) + oList.offsetHeight < document.documentElement.clientHeight + scrollTop ){
+
+						if(b){
+							b = false;
+							iPage++;
+							loadBook();
+						}
+
+					}
+
+				}
+
+				//利用jsonp发送请求，加载图书
+				function loadBook(){
+
+					var oText = document.getElementsByClassName("text")[0];
+
+					var oScript = document.createElement("script");
+					oScript.src = 'https://api.douban.com/v2/book/search?q='+oText.value+'&count='+num+'&start='+iPage*num+'&callback=search';
+					document.body.appendChild(oScript);
+				}
+
+				//加载图书
+				function search(data){
+
+					var oList = document.getElementsByClassName("list")[0];
+					var html = "";
+					//如果没书了就返回
+					if(!data.books.length){return;};
+
+					for(var i=0;i<data.books.length;i++){
+
+						var book = data.books[i];
+
+						var title = '《'+book.title+'》';
+
+						var author = "";
+
+						switch(book.author.length){
+							case 0:
+							author = "";
+							break;
+							case 1:
+							author = book.author[0]+' 著';
+							break;
+							case 2:
+							author = book.author[0]+"、"+book.author[1]+'著';
+							break;
+							default:
+							author = book.author[0]+"、"+book.author[1]+'等';
+
+						}
+
+						html+=' <li><img class="pic" src="'+book.image+'"><div class="intro"><a class="title" target="_blank" href="'+book.alt+'">'+title+'</a><span class="author">'+author+'</span></div></li> ';
+					}
+					oList.innerHTML += html;
+
+					b = true;
+
+				} 
+
+				//求元素到body的top值
+				//document.body.offsetParent 为 null
+				function getTop(obj){
+					var iTop=0;
+					while(obj){
+						iTop += obj.offsetTop;
+						obj = obj.offsetParent;
+					}
+					return iTop;
+				}
+
+
+
+
+				
+			</script>
+	</body>
+</html>

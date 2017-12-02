@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>百度搜索</title>
+	<style>
+		#wrap{
+			width:320px;
+			margin:30px auto;
+		}
+		.text{
+			width:300px;
+			height:30px;
+			padding:10px;
+			font:16px/30px "宋体";
+			outline:none;
+			border:2px solid red;
+			border-radius:15px 15px 0 0;
+		}
+		.list{
+			width:320px;
+			padding:0;
+			margin:0;
+			list-style:none;
+			border:2px solid #f90;
+			border-top:none;
+			display:none;
+		}
+		.list li a{
+			display:block;
+			line-height:30px;
+			text-decoration:none;
+			padding:5px 10px;
+			color:#000;
+		}
+		.list li a:hover{
+			background:#f90;
+			color:#fff;
+		}
+		
+	</style>
+</head>
+<body>
+	<div id="wrap">
+		<input type="text" class="text">
+		<ul class="list">
+<!-- 			<li><a href="">123</a></li>
+			<li><a href="">123</a></li> -->
+		</ul>
+	</div>
+	
+	<script>
+		// 请求地址：https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=b&cb=search
+		// 数据：
+		// search({q:"b",p:false,s:["baidu","bt","btchina","beyond","bbs","bbc","blog","bobo组合","bb霜"]});
+		// 跳转的地址：https://www.baidu.com/s?wd=爱奇艺
+		
+		function search(data){
+
+			var oList = document.getElementsByClassName("list")[0];
+			var html = "";
+
+			if(data.s.length){
+				oList.style.display = "block";
+				for(var i=0;i<data.s.length;i++){
+					// 跳转的地址：https://www.baidu.com/s?wd=爱奇艺
+					// 其中爱奇艺是选中的内容，可以改变
+					html += '<li><a target="_black" href="https://www.baidu.com/s?wd='+data.s[i]+'">'+data.s[i]+'</a></li>';
+				}
+
+				oList.innerHTML = html;
+			}else{
+				oList.style.display = "none";
+			}
+
+		} 
+
+
+		var oText = document.getElementsByClassName("text")[0];
+		var oList = document.getElementsByClassName("list")[0];
+
+		// 请求地址：https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=a&cb=window.bdsug.sug
+		// wd=a，其中a是搜索的内容，可以修改
+		// cb=window.bdsug.sug，cb是callback，window.bdsug.sug是调用的函数名，可以修改
+		// 
+		oText.onkeyup = function(){
+			var oScript = document.createElement("script");
+			oScript.src = 'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd='+this.value+'&cb=search';
+			document.body.appendChild(oScript);
+		}
+
+		
+	</script>
+</body>
+</html>
+
+
+
+
