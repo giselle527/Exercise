@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>类式继承</title>
+	<style>
+
+		
+	</style>
+</head>
+<body>
+	
+	<input type="button" value="sure" id="btn">
+
+	<!-- 
+		类式继承小栗子
+	-->
+	<script>
+		function Person(name){
+			this.name = name;
+		}
+		Person.prototype.showName = function(){
+			console.log(this.name);
+		}
+
+		function ChildP(name,age){
+			Person.call(this,name);
+			this.age = age;
+		}
+
+		function F(){};
+		F.prototype = Person.prototype;
+		ChildP.prototype = new F();
+		ChildP.prototype.constructor = ChildP;
+
+		var p0 = new Person("wang");
+
+		var c0 = new ChildP("xiao",21);
+		c0.showName();
+
+		console.log(p0);
+		console.log(c0);
+
+	</script>
+
+	<!-- 
+		类式继承bug版 
+		关键：ChildP.prototype = new Person(); 子类的原型是父类的实例对象，继承了父类的属性和方法
+	-->
+	<script>
+		// function Person(){ //父类
+		// 	this.name = [0,1,2];
+		// }
+		// Person.prototype.showName = function(){
+		// 	console.log(this.name);
+		// }
+
+		// function ChildP(){}; //子类
+
+		// ChildP.prototype = new Person(); //将父类的实例赋给子类的原型
+
+		// // bug0: 子类原型中的构造函数指向父类		
+		// // console.log( ChildP.prototype.constructor ); // Person函数
+		// // 改正：
+		// ChildP.prototype.constructor = ChildP;
+
+		// // bug1: 当父例的属性值为对象时，子类创建的实例继承到的父类的属性值是共用的一个引用地址
+		// var c0 = new ChildP();
+		// var c1 = new ChildP();
+		// c0.name.push(4);
+
+		// console.log(c0.name); //[0, 1, 2, 4]
+		// console.log(c1.name); //[0, 1, 2, 4]
+	</script>
+
+	<!-- 
+		正确的类式继承 
+	-->
+	<script>
+		// function Person(){
+		// 	this.name = [0,1,2];
+		// }
+		// Person.prototype.showName = function(){
+		// 	console.log(this.name);
+		// }
+
+		// function ChildP(){
+		// 	Person.call(this); //通过call调用父类获得ownproperty
+		// }
+
+		// //类式继承最重要的四条代码：
+		// //原理：通过新建构造函数F，只继承父类Person的原型，而不继承OwnProperty，避免属性使用同一个引用地址，通过 父类.call(this); 的方式继承OwnProperty
+
+		// //1
+		// var F = function(){}; 
+		// //2
+		// F.prototype = Person.prototype;
+		// //3
+		// ChildP.prototype = new F(); //子类ChildP只继承了父类Person的原型
+		// //4
+		// ChildP.prototype.constructor = ChildP; //修正原型指向的构造函数
+
+		// var c0 = new ChildP();
+		// var c1 = new ChildP();
+		// c0.name.push(4);
+
+		// console.log(c0.name);  //[0, 1, 2, 4]
+		// console.log(c1.name);  //[0, 1, 2]
+	</script>
+
+	<!-- 
+		面向对象的三种主要继承方式
+
+		1.拷贝继承：属性通过call，方法通过call in，此方法使用的最广泛
+		2.类式继承：属性通过call，方法通过新建一个构造函数过渡，此方法适合new 构造函数
+		3.原型继承：适用于无new的对象，我觉得这种方法不用考虑，也不值得深究
+
+	 -->
+
+
+</body>
+</html>
+
+

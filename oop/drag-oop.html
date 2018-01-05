@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>面向对象之改写拖拽</title>
+	<style>
+		div{
+			width:100px;
+			height:100px;
+			background:pink;
+			position:absolute;
+		}
+		#div1{
+			background:yellow;
+			left:110px;
+		}
+	</style>
+</head>
+<body>
+	<div id="div0"></div>
+	<div id="div1"></div>
+	<!-- 面向过程 -->
+ 	<!-- <script>
+		var oDiv = document.getElementById("div0");
+
+		var disX = 0;
+		var disY = 0;
+
+		oDiv.onmousedown = function(ev){
+			var ev = ev || event;
+			disX = ev.clientX - oDiv.offsetLeft;
+			disY = ev.clientY - oDiv.offsetTop;
+
+			document.onmousemove = function(ev){
+				var ev = ev || event;
+				oDiv.style.left = ev.clientX - disX + "px";
+				oDiv.style.top = ev.clientY - disY + "px";
+			};
+			document.onmouseup = function(){
+				document.onmousemove = null;
+				document.onmouseup = null;
+			}
+			return false;
+		}
+	</script> -->
+
+	<script>
+
+		window.onload = function(){
+			var d = new Drag("div0");
+			d.init();
+
+			var cd = new ChildDrag("div1");
+			cd.init();
+		}
+		
+		//注意处理this和event
+		function Drag(id){ //父类
+			this.ele = document.getElementById(id);
+			this.disX = 0;
+			this.disY = 0;
+		}
+
+		Drag.prototype.init = function(){
+			var _this = this;
+			this.ele.onmousedown = function(ev){
+				var ev = ev || event;
+				_this.down(ev);
+
+				return false;
+			};			
+		}
+
+		Drag.prototype.down = function(ev){
+			var _this = this;
+			
+			this.disX = ev.clientX - this.ele.offsetLeft;
+			this.disY = ev.clientY - this.ele.offsetTop;
+
+			document.onmousemove = function(ev){
+				var ev = ev || event;
+				_this.move(ev);
+			}
+			document.onmouseup = this.up;		
+		}
+
+		Drag.prototype.move = function(ev){
+			
+			this.ele.style.left = ev.clientX - this.disX + "px";
+			this.ele.style.top = ev.clientY - this.disY + "px";			
+		}
+
+		Drag.prototype.up = function(){
+			document.onmousemove = null;
+			document.onmouseup = null;			
+		}
+
+
+		function ChildDrag(id){ //子类
+			Drag.call(this,id); //调用父函数继承其属性，用call方法改变this指向
+		}
+
+		extend(ChildDrag.prototype, Drag.prototype); //用for in方法继承父类的prototype对象
+
+		ChildDrag.prototype.move = function(ev){//子类直接改相应的方法就行
+			var l = ev.clientX - this.disX;
+			var t = ev.clientY - this.disY;
+
+			if(l<0){
+				l=0;
+			}else if( l > document.documentElement.clientWidth-this.ele.offsetWidth ){
+				l=document.documentElement.clientWidth-this.ele.offsetWidth;
+			};
+
+			if(t<0){
+				t=0;
+			}else if( t > document.documentElement.clientHeight-this.ele.offsetHeight ){
+				t=document.documentElement.clientHeight-this.ele.offsetHeight;
+			}
+
+			this.ele.style.left = l + "px";
+			this.ele.style.top = t + "px";			
+		}
+
+		//用来继承父类的prototype对象
+		function extend(obj0,obj1){
+			for( attr in obj1){
+				obj0[attr] = obj1[attr];
+			}
+		}
+	</script>
+	
+</body>
+</html>

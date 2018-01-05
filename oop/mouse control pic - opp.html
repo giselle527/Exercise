@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>鼠标控制缩放图片(面向过程)</title>
+	<style>
+		body{margin:0;padding:0;}
+		#box{
+			width:100%;
+			text-align:center;
+			position:absolute;
+			bottom:0;
+		}
+		img{
+			width:64px;
+			/* 为了放大时，不至于模糊，将宽度设为了图片的一半 */
+		}
+	</style>
+
+</head>
+<body>
+	<div id="box">
+		<img src="images/0.png">
+		<img src="images/1.png">
+		<img src="images/2.png">
+		<img src="images/3.png">
+		<img src="images/4.png">
+	</div>
+	<script>
+		var oBox = document.getElementById("box");
+		var aImg = oBox.getElementsByTagName("img");
+
+		document.onmousemove = function(ev){
+			var ev = ev || event;
+
+			for( var i=0;i<aImg.length;i++ ){
+				var x = aImg[i].offsetLeft + aImg[i].offsetWidth/2;
+				var y = aImg[i].offsetTop + aImg[i].offsetHeight/2 + oBox.offsetTop;
+				// console.log(x + ": " + y);
+				// 
+				var a = ev.clientX - x;
+				var b = ev.clientY - y;
+				var c = Math.sqrt( Math.pow(a,2) + Math.pow(b,2) );
+				// c 越大，说明 a/b越大，说明鼠标离图片越远
+
+				var r = 300;
+				var zoom = 1 - c/r;
+				// c/r获得一个比例值，若r固定，c越大，c/r的值越大，离图片越远，所以用1相减，使得c越大，离图片越近
+				
+				//为什么r是300？
+				//c固定的情况下，r控制的是图片感应鼠标的范围，r越大，c/r越小，1-c/r越大，即感应范围越大
+				//q: 为什么只限制最小值，不限制最大值
+				//a: c/r肯定是正值，那么就肯定小于1，没必要限制 
+				if(zoom < 0.5){zoom = 0.5};
+
+				aImg[i].style.width = zoom * 128 + "px";
+				aImg[i].style.height = zoom * 128 + "px";
+				
+			}
+
+		}
+
+
+	</script>
+	
+</body>
+</html>

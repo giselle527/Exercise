@@ -4,6 +4,34 @@ readme
 ---
 [TOC]
 
+## oop
+   
+**介绍** 
+
+涉及到面向对象编程的小练习，概念：
+
+* 面向对象的程序设计：OOP → Object-Oriented Programming
+* 面向过程的程序设计：OPP → Procedure Oriented Programming  
+
+小练习包括：
+
+* 切换选项卡（changetab-oop）
+* 拖拽（drag-oop）
+* 弹窗（dialog-oop-onoff）：使用对象作为开关标记已弹出弹框的做法非常聪明
+* 类式继承（class inheritance）
+* 组件开发（component development）
+    + 基于对象的组件开发（component dev.-obj-based）
+    + 组件开发之自定义事件（component dev.-custom event）
+    + 基于jq的选项卡组件（component dev.-jq-based）：包含参数、方法、事件三者分离的思想
+* 放大镜（magnifier）
+    + 面向过程之放大镜（magnifier-opp）
+    + 面向对象之放大镜（magnifier-oop）
+    + 面向对象之放大镜jq（magnifier-oop-jq）
+    + 面向对象之放大镜组件版（magnifier-oop-module）
+* 鼠标控制图片缩放（mouse control pic）
+    + 鼠标控制图片缩放(面向过程)（mouse control pic - opp）
+    + 鼠标控制图片缩放jq（mouse control pic - oop-jq）
+
 ## ajax
 
 ### jsonp case

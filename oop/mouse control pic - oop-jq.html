@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>鼠标控制缩放图片jq</title>
+	<style>
+		body{margin:0;padding:0;}
+		#box{
+			width:100%;
+			text-align:center;
+			position:absolute;
+			bottom:0;
+		}
+
+		#box1{
+			width:800px;
+			position:absolute;
+			top:30px;
+			left:20px;
+		}
+
+
+	</style>
+	<script src = 'jquery-3.2.1.slim.min.js'></script>
+	<script>
+		$(function(){
+
+			var z0 = new Zoom();
+
+			z0.init("box",{
+				pic:["images/0.png","images/1.png","images/2.png","images/3.png","images/4.png"],
+				picW:128,
+				picH:128,
+				num:300
+			});
+
+
+			var z1 = new Zoom();
+
+			z1.init("box1",{
+				pic:["images/0.png","images/1.png","images/2.png"],
+				picW:128,
+				picH:128,
+				num:500,
+				fn:function(){
+					z1.showParent();
+				}
+			});
+
+		})
+
+		function Zoom(){
+
+			this.oParent = null;
+
+			// 配置参数可以更改：图片pic、图片宽高picW&picH、缩放比例分母mum、函数fn
+			this.settings = {
+				pic:["images/0.png","images/1.png","images/2.png","images/3.png","images/4.png"],
+				picW:128,
+				picH:128,
+				num:300,
+				fn:function(){}
+			}
+
+		}
+
+		//将参数里的图片写入到页面上
+		//执行函数fn
+		//在mousemove中调用缩放函数
+		Zoom.prototype.init = function(oParent,opt){
+
+			this.oParent = $("#"+oParent);
+			
+			var _this = this;
+
+			$.extend( this.settings, opt );
+
+			this.settings.fn();
+
+			var html = "";
+			for(var i=0;i<this.settings.pic.length;i++){
+				html += '<img style="width:'+this.settings.picW/2+'px; height:'+this.settings.picH/2+'px;" src="'+this.settings.pic[i]+'">';
+			}
+			this.oParent.append(html);
+
+			$(document).mousemove(function(ev){
+				var ev = ev || event;
+				_this.scale(ev);
+			});
+			
+		};
+
+		Zoom.prototype.scale = function( ev ){
+						
+			var _this = this;
+
+			var aImg = this.oParent.find("img");
+			// console.log(ev);
+			aImg.each(function(){
+				var x = $(this).offset().left + $(this).width()/2;
+				var y = $(this).offset().top + $(this).height()/2;
+				
+				var a = ev.clientX - x;
+				var b = ev.clientY - y;
+				var c = Math.sqrt( Math.pow(a,2) + Math.pow(b,2) );
+				// console.log(c);
+				
+				var per = 1 - c/_this.settings.num;
+
+				if(per<0.5){per = 0.5};
+
+				$(this).css( {"width":_this.settings.picW * per +"px", "height":_this.settings.picH * per +"px"} );
+			})
+
+		}
+
+		Zoom.prototype.showParent = function(){
+			this.oParent.append('<p>我的父级是：'+this.oParent.attr("id")+'</p>');
+		}
+	</script>
+
+</head>
+<body>
+	<div id="box"></div>
+	<div id="box1"></div>
+	
+</body>
+</html>

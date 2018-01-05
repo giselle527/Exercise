@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>面向对象之切换选项卡</title>
+	<style>
+		#box0,#box1{
+			height:130px;
+			margin-top:20px;
+			position:relative;
+		}
+		.cont{
+			width:100px;
+			height:100px;
+			background:pink;
+			position:absolute;
+			left:10px;
+			top:30px;
+			display:none;
+		}
+		.cont:nth-of-type(1){
+			display:block;
+		}
+	</style>
+</head>
+<body>
+	<div id="box0">
+		<input type="button" value="btn" class="btn" />
+		<input type="button" value="btn" class="btn" />
+		<input type="button" value="btn" class="btn" />
+		<div class="cont">0</div>
+		<div class="cont">1</div>
+		<div class="cont">2</div>
+	</div>
+	<div id="box1">
+		<input type="button" value="btn" class="btn" />
+		<input type="button" value="btn" class="btn" />
+		<input type="button" value="btn" class="btn" />
+		<div class="cont">0</div>
+		<div class="cont">1</div>
+		<div class="cont">2</div>
+	</div>
+<!-- 	<script>
+		var aCont = document.getElementsByClassName("cont");
+		var aBtn = document.getElementsByClassName("btn");
+
+		var num = 0;
+		for(var i=0;i<aBtn.length;i++){
+			aBtn[i].index = i;
+			aBtn[i].onclick = function(){
+				aCont[num].style.display = "none";
+				aCont[this.index].style.display = "block";
+				num = this.index;
+			}
+		}
+
+	</script> -->
+
+		<script>
+			function Tab(ele){
+				this.oEle = document.getElementById(ele);
+				this.aCont = this.oEle.getElementsByClassName("cont");
+				this.aBtn = this.oEle.getElementsByClassName("btn");
+				this.num = 0;
+			}
+			
+			Tab.prototype.init = function(){
+				var _this = this;
+				for(var i=0;i<this.aBtn.length;i++){
+					this.aBtn[i].index = i;
+					this.aBtn[i].onclick = function(){
+						_this.change(this);
+					};
+				}
+			}
+
+			Tab.prototype.change = function(obj){
+				this.aCont[this.num].style.display = "none";
+				this.aCont[obj.index].style.display = "block";
+				this.num = obj.index;
+			}
+
+			var t1 = new Tab("box0");
+			var t2 = new Tab("box1");
+			t1.init();
+			t2.init();
+
+		</script>
+	
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>面向对象之放大镜组件版</title>
+	<style>
+
+		.pics,.cover{
+			width:200px;
+			height:200px;
+			position:absolute;
+			left:0;
+			top:0;
+
+		}
+
+		.cover{
+			opacity:0;
+			filter:alpha(opacity=0);/*兼容IE，值是0-100*/
+		}
+
+		.mask{
+			width:100px;
+			height:100px;
+			background:#FE0913;
+			opacity:0.4;
+			filter:alpha(opacity=40);/*兼容IE，值是0-100*/
+			position:absolute;
+			left:0;
+			top:0;
+			display:none;
+
+		}
+
+		.picl{
+			width:400px;
+			height:400px;
+			overflow:hidden;
+			display:none;
+			position:absolute;
+			left:250px;
+			top:50px;
+		}
+
+		.picl img{
+			position:absolute;
+			left:0;
+			top:0;
+		}
+		
+	</style>
+	<script src="jquery-3.2.1.slim.min.js"></script>
+
+</head>
+<body>
+
+	<div id="box">
+			<div class="pics">
+				<img src="images/pic1.jpg">
+				<span class="mask"></span>
+				<div class="cover"></div>
+			</div>
+			<div class="picl">
+				<img src="images/pic0.jpg">
+			</div>
+	</div>
+
+	<div id="box1">
+			<div class="pics">
+				<img src="images/pic1.jpg">
+				<span class="mask"></span>
+				<div class="cover"></div>
+			</div>
+			<div class="picl">
+				<img src="images/pic0.jpg">
+			</div>
+	</div>
+
+	<div id="box2">
+			<div class="pics">
+				<img src="images/pic1.jpg">
+				<span class="mask"></span>
+				<div class="cover"></div>
+			</div>
+			<div class="picl">
+				<img src="images/pic0.jpg">
+			</div>
+	</div>
+
+	<script>
+
+		function Scale(){
+
+			this.oPics = null;
+			this.oPicl = null;
+			this.oMask = null;
+			this.oImg = null;
+
+			this.parentTop = null;
+			this.parentLeft = null;
+
+			this.settings = {
+				pleft: 0,
+				ptop: 0,
+				pics: "pic1.jpg",
+				picb: "pic0.jpg"
+			};
+
+		}
+
+		Scale.prototype.init = function( oParent,opt ){
+			var _this = this;
+
+			$.extend( this.settings, opt );
+
+			this.oParent = $("#"+oParent);
+
+			this.oParent.css({"position":"absolute","left":this.settings.pleft, "top":this.settings.ptop});
+
+			this.oPics = this.oParent.find(".pics");
+			this.oPicl = this.oParent.find(".picl");
+			this.oMask = this.oParent.find(".mask");
+			this.oImg = this.oParent.find("img");
+
+			this.oImg.eq(0).attr("src","images/"+this.settings.pics);
+			this.oImg.eq(1).attr("src","images/"+this.settings.picb);
+
+		
+			this.oPics.mouseover(function(){
+				_this.show();
+			});
+
+			this.oPics.mousemove(function(ev){
+				var ev = ev || event;
+				_this.moveMask(ev);
+				_this.movePicl();
+				
+			});
+
+			this.oPics.mouseout(function(){
+				_this.hidden();
+			});
+		}
+
+		Scale.prototype.show = function(){
+			this.oMask.css("display","block");
+			this.oPicl.css("display","block");
+		}
+
+		Scale.prototype.moveMask = function(ev){
+			// 鼠标相对窗口的位置 - parent相对窗口的位置 - mask.height /2
+			this.parentTop = this.oParent.get(0).getBoundingClientRect().top;
+			this.parentLeft = this.oParent.get(0).getBoundingClientRect().left;
+
+			var l = ev.clientX - this.parentLeft - this.oMask.get(0).offsetWidth/2;
+			var t = ev.clientY - this.parentTop - this.oMask.get(0).offsetHeight/2;
+
+			if(l<0){l = 0 };
+			if(l > this.oPics.get(0).offsetWidth - this.oMask.get(0).offsetWidth ){l = this.oPics.get(0).offsetWidth - this.oMask.get(0).offsetWidth };
+			if(t<0){t = 0 };
+			if(t > this.oPics.get(0).offsetHeight - this.oMask.get(0).offsetHeight ){t = this.oPics.get(0).offsetHeight - this.oMask.get(0).offsetHeight };
+
+			this.oMask.css( {"left":l + "px", "top":t + "px"} );
+
+			//计算比率：l值/最大l值
+			this.scaleX = l / (this.oPics.get(0).offsetWidth - this.oMask.get(0).offsetWidth);
+			this.scaleY = t / (this.oPics.get(0).offsetHeight - this.oMask.get(0).offsetHeight);
+		}
+
+		Scale.prototype.movePicl = function(){
+			// 计算右边大图的left值和top值
+			var l = (this.oImg.get(1).offsetWidth - this.oPicl.get(0).offsetWidth) * this.scaleX;
+			var t = (this.oImg.get(1).offsetHeight - this.oPicl.get(0).offsetHeight) * this.scaleY;
+
+			this.oImg.css({"left":-l+"px", "top":-t+"px"});
+		}
+
+		Scale.prototype.hidden = function(){
+			this.oMask.css("display","none");
+			this.oPicl.css("display","none");
+		}
+
+		var s0 = new Scale();
+		s0.init( "box", {} );
+
+		var s1 = new Scale();
+		s1.init( "box1", {
+			ptop:210,
+			pleft:50
+		} );
+
+		var s2 = new Scale();
+		s2.init( "box2", {
+			ptop:520,
+			pleft:0,
+			pics:"142a.jpg",
+			picb:"142.jpg"
+		} );
+
+	</script>
+
+
+	
+</body>
+</html>
+
+
+ 

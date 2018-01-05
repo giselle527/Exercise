@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>面向对象之放大镜</title>
+	<style>
+		.pics,.cover{
+			width:200px;
+			height:200px;
+			position:absolute;
+			left:0;
+			top:0;
+
+		}
+
+		.cover{
+			opacity:0;
+			filter:alpha(opacity=0);/*兼容IE，值是0-100*/
+		}
+
+		.mask{
+			width:100px;
+			height:100px;
+			background:#FE0913;
+			opacity:0.4;
+			filter:alpha(opacity=40);/*兼容IE，值是0-100*/
+			position:absolute;
+			left:0;
+			top:0;
+			display:none;
+
+		}
+
+		.picl{
+			width:400px;
+			height:400px;
+			overflow:hidden;
+			display:none;
+			position:absolute;
+			left:250px;
+			top:50px;
+		}
+
+		.picl img{
+			position:absolute;
+			left:0;
+			top:0;
+		}
+
+
+
+
+		
+	</style>
+
+</head>
+<body>
+	<div class="pics">
+		<img src="images/pic1.jpg">
+		<span class="mask"></span>
+		<div class="cover"></div>
+
+	</div>
+	<div class="picl">
+		<img src="images/pic0.jpg">
+	</div>
+
+	<script>
+
+		function Scale(){
+			this.oPics = document.getElementsByClassName("pics")[0];
+			this.oPicl = document.getElementsByClassName("picl")[0];
+			this.oMask = document.getElementsByClassName("mask")[0];
+			this.oImg = this.oPicl.getElementsByTagName("img")[0];
+
+		}
+
+		Scale.prototype.init = function(){
+			var _this = this;
+
+			this.oPics.onmouseover = function(){
+				_this.show();
+			};
+
+			this.oPics.onmousemove = function(ev){
+				var ev = ev || event;
+				_this.moveMask(ev);
+				_this.movePicl();
+				
+			};
+
+			this.oPics.onmouseout = function(){
+				_this.hidden();
+			}
+		}
+
+		Scale.prototype.show = function(){
+			this.oMask.style.display = "block";
+			this.oPicl.style.display = "block";
+		}
+
+		Scale.prototype.moveMask = function(ev){
+
+			var l = ev.clientX - this.oMask.offsetWidth/2;
+			var t = ev.clientY - this.oMask.offsetHeight/2;
+
+			if(l<0){l = 0 };
+			if(l > this.oPics.offsetWidth - this.oMask.offsetWidth ){l = this.oPics.offsetWidth - this.oMask.offsetWidth };
+			if(t<0){t = 0 };
+			if(t > this.oPics.offsetHeight - this.oMask.offsetHeight ){t = this.oPics.offsetHeight - this.oMask.offsetHeight };
+
+			this.oMask.style.left = l + "px";
+			this.oMask.style.top = t + "px";
+
+			this.scaleX = l / (this.oPics.offsetWidth - this.oMask.offsetWidth);
+			this.scaleY = t / (this.oPics.offsetHeight - this.oMask.offsetHeight);
+		}
+
+		Scale.prototype.movePicl = function(){
+			var l = (this.oImg.offsetWidth - this.oPicl.offsetWidth) * this.scaleX;
+			var t = (this.oImg.offsetHeight - this.oPicl.offsetHeight) * this.scaleY;
+
+			this.oImg.style.left = -l+"px";
+			this.oImg.style.top = -t+"px";
+		}
+
+		Scale.prototype.hidden = function(){
+			this.oMask.style.display = "none";
+			this.oPicl.style.display = "none";
+		}
+
+		var s0 = new Scale();
+		s0.init();
+
+
+
+
+		
+
+	</script>
+
+
+	
+</body>
+</html>
+<!-- 
+用面向对象的方法写放大镜
+1.尝试把方法改成事件
+
+ -->
+
+ 

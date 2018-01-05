@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>面向过程之放大镜</title>
+	<style>
+		#pics{
+			width:200px;
+			height:200px;
+			position:absolute;
+			left:0;
+			top:0;
+
+		}
+
+		#mask{
+			width:100px;
+			height:100px;
+			background:#FE0913;
+			display:none;
+			opacity:0.4;
+			filter:alpha(opacity=40);/*兼容IE，值是0-100*/
+			position:absolute;
+			left:0;
+			top:0;
+
+		}
+
+		#cover{
+			width:200px;
+			height:200px;
+			opacity:0;
+			filter:alpha(opacity=0);/*兼容IE，值是0-100*/
+			position:absolute;
+			left:0;
+			top:0;
+		}
+
+		#picl{
+			width:400px;
+			height:400px;
+			overflow:hidden;
+			display:none;
+			position:absolute;
+			left:250px;
+			top:50px;
+		}
+		#picl img{
+			position:absolute;
+			left:0;
+			top:0;
+		}
+
+
+
+
+		
+	</style>
+
+</head>
+<body>
+	<div id="pics">
+		<img src="images/pic1.jpg">
+		<span id="mask"></span>
+		<div id="cover"></div>
+
+	</div>
+	<div id="picl">
+		<img src="images/pic0.jpg">
+	</div>
+
+	<script>
+		var oPics = document.getElementById("pics");
+		var oMask = document.getElementById("mask");
+		var oPicl = document.getElementById("picl");
+		var oImg = oPicl.getElementsByTagName("img")[0];
+
+
+		oPics.onmouseover = function(){
+			oMask.style.display = "block";
+			oPicl.style.display = "block";
+
+		}
+
+		oPics.onmousemove = function( ev ){
+			var ev = event || ev;
+
+			var l = ev.clientX - oMask.offsetWidth/2;
+			var t = ev.clientY - oMask.offsetHeight/2;
+
+			if(l<0){
+				l = 0;
+			}else if( l > oPics.offsetWidth - oMask.offsetWidth ){
+				l = oPics.offsetWidth - oMask.offsetWidth;
+			};
+
+			if(t<0){
+				t = 0;
+			}else if( t > oPics.offsetHeight - oMask.offsetHeight ){
+				t = oPics.offsetHeight - oMask.offsetHeight;
+			};
+
+			oMask.style.left = l + "px";
+			oMask.style.top = t + "px";
+
+			// 比例原理：oMask的left值/oMask最大的left值 = oImg的left值/oImg最大的left值
+			// 其中：oMask的left值、oMask最大的left值、oImg最大的left值已知
+			// 求：oImg的left值
+			var scaleX = l / (oPics.offsetWidth - oMask.offsetWidth);
+			var scaleY = t / (oPics.offsetHeight - oMask.offsetHeight);
+
+
+			oImg.style.left = -scaleX * (oImg.offsetWidth - oPicl.offsetWidth) + "px";
+			oImg.style.top = -scaleY * (oImg.offsetHeight - oPicl.offsetHeight) + "px";
+			// console.log( oImg.style.left + " & " +oImg.style.top);
+
+		}
+
+
+		oPics.onmouseout = function(){
+			oMask.style.display = "none";
+			oPicl.style.display = "none";
+
+		}
+	</script>
+
+
+	
+</body>
+</html>
+
+
+ 

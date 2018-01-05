@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>组件开发之自定义事件</title>
+	<style>
+		div{
+			width:100px;
+			height:100px;
+			position:absolute;
+		}
+		#div0{
+			background:pink;
+		}
+		#div1{
+			background:yellow;
+			left:110px;
+		}
+
+		
+	</style>
+</head>
+<body>
+
+	<div id="div0"></div>
+	<div id="div1"></div>
+
+	<script>
+
+		window.onload = function(){
+			var d = new Drag();
+			d.init({ //参数用json格式的数据传递
+				id:"div0"
+			});
+
+			bindEv(d,"toUp",function(){
+					document.title = "div0";
+				});
+
+			var d1 = new Drag();
+			d1.init({
+				id:"div1"
+			});
+
+			bindEv(d1,"toUp",function(){
+					document.title = "up";
+				});
+
+			bindEv(d1,"toDown",function(){
+					document.title = "down";
+				});
+			
+		}
+		
+		function Drag(){ 
+			this.ele = null;
+			this.disX = 0;
+			this.disY = 0;
+			this.settings = { //设置默认参数
+			};
+		}
+
+		Drag.prototype.init = function(opt){
+			var _this = this;
+			
+			extend(this.settings,opt); //将配置参数传递给默认参数
+
+			this.ele = document.getElementById(this.settings.id);
+
+			this.ele.onmousedown = function(ev){
+				var ev = ev || event;
+				_this.down(ev);
+				fireEv(_this,"toDown");
+				return false;
+			};			
+		}
+
+		Drag.prototype.down = function(ev){
+			var _this = this;
+			
+			this.disX = ev.clientX - this.ele.offsetLeft;
+			this.disY = ev.clientY - this.ele.offsetTop;
+
+			document.onmousemove = function(ev){
+				var ev = ev || event;
+				_this.move(ev);
+			}
+			document.onmouseup = function(){
+				_this.up();
+				fireEv(_this,"toUp");
+
+			};		
+		}
+
+		Drag.prototype.move = function(ev){
+			
+			this.ele.style.left = ev.clientX - this.disX + "px";
+			this.ele.style.top = ev.clientY - this.disY + "px";			
+		}
+
+		Drag.prototype.up = function(){
+			document.onmousemove = null;
+			document.onmouseup = null;			
+		}
+
+
+		function extend(obj0,obj1){
+			for(var attr in obj1){
+				obj0[attr] = obj1[attr];
+			}
+			return obj0;
+		}
+
+		//用函数的方式绑定事件
+		function bindEv(obj,events,fn){
+
+			obj.listeners = obj.listeners || {};
+			obj.listeners[events] = obj.listeners[events] || [];
+			obj.listeners[events].push(fn);
+
+			//以下是为了兼容DOM元素
+			if(obj.nodeType){
+				if(obj.addEventListener){
+					obj.addEventListener(events,fn,false);
+				}else{
+					obj.attachEvent("on"+events,function(){
+						fn.call(obj);
+					});
+				}
+			}
+		}
+
+		//调用用函数方式绑定的事件
+		function fireEv(obj,events){
+			//如果没有为对象绑定事件，obj.listeners就为undefined；如果事件下没有函数，obj.listeners[events]也会为undefined，undefined是没有.length属性的，因此要做判断
+			if( obj.listeners && obj.listeners[events] ){
+				for(var i=0;i<obj.listeners[events].length;i++){
+					obj.listeners[events][i]();
+				}
+			}
+		}
+
+	</script>
+	
+
+</body>
+</html>

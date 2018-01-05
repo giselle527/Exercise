@@ -1,0 +1,2 @@
+面向对象的程序设计：OOP → Object-Oriented Programming
+面向过程的程序设计：OPP → Procedure Oriented Programming
