@@ -16,7 +16,7 @@ function doMove(obj,str,dir,target,t,endFn){//利用定时器改变style属性�
 		if(speed>target&&dir>0||speed<target&&dir<0){
 			speed=target;
 		}	
-		oDiv.style[str]=speed+"px";
+		obj.style[str]=speed+"px";
 		if(speed==target){
 			clearInterval(obj.timer); 
 			endFn && endFn();
