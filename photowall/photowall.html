@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>照片墙</title>
+	<style>
+		body,ul{margin:0; padding:0;}
+		li{list-style:none;}
+
+		#list{
+			width:810px;
+			margin:30px auto;
+			position:relative;
+
+		}
+
+		li{
+			width:250px;
+			height:140px;
+			margin:10px;
+			float:left;
+		}
+
+	</style>
+	<script src = "tools.js"></script>
+	<script>
+		window.onload = function(){
+
+			var oList = document.getElementById("list");
+			var aLi = oList.getElementsByTagName("li");
+			var oBtn = document.getElementById("btn");
+
+			var arr = []; //用来存放每一个li的left值和top值
+			var izIndex = 2;
+
+			for( var i=0;i<aLi.length;i++ ){
+				aLi[i].index = i;
+				arr.push( [ aLi[i].offsetLeft, aLi[i].offsetTop ] ); //把数据存起来，方便以后使用
+			}
+
+			for( var i=0;i<aLi.length;i++ ){
+				aLi[i].style.position = "absolute";
+				aLi[i].style.left = arr[i][0] + "px";
+				aLi[i].style.top = arr[i][1] + "px";
+				aLi[i].style.margin = 0; // offsetLeft和Top里已经包含了margin的部分
+			}
+
+			for( var i =0;i<aLi.length;i++ ){
+				drag(aLi[i]);
+			}
+
+			oBtn.onclick = function(){
+				var randomArr = [0,1,2,3,4,5,6,7,8];
+				
+				randomArr.sort(function(a,b){
+					return Math.random() - 0.5;
+				});
+
+				for(var i=0;i<aLi.length;i++){
+					startMove({
+						obj:aLi[i],
+						attrs:{left:arr[ randomArr[i] ][0] , top:arr[ randomArr[i] ][1]}
+
+					})
+					aLi[i].index = randomArr[i];
+				}
+
+			}
+
+			
+			function drag( obj ){
+				var disx = 0;
+				var disy = 0;
+
+				obj.onmousedown = function(ev){
+
+					this.style.zIndex = izIndex++;
+
+					var ev = ev || event;
+					disx = ev.clientX - obj.offsetLeft;
+					disy = ev.clientY - obj.offsetTop;
+
+					document.onmousemove = function( ev ){
+						var ev = ev || event;
+						obj.style.left = ev.clientX - disx + "px";
+						obj.style.top = ev.clientY - disy + "px";
+
+						for( var i =0;i<aLi.length;i++ ){
+							aLi[i].style.border = "";
+						}
+
+						var nL = nearLi(obj);
+
+						if(nL){
+							nL.style.border = "1px solid red";
+						}
+					};
+
+					document.onmouseup = function(){
+						document.onmousemove = null;
+						document.onmouseup = null;
+
+						var tmp = 0;
+
+						var nL = nearLi(obj);
+
+						if( nL ){
+							
+							startMove({
+								obj:nL,
+								attrs:{left:arr[obj.index][0] , top:arr[obj.index][1]}
+							});
+							startMove({
+								obj:obj,
+								attrs:{left:arr[nL.index][0] , top:arr[nL.index][1]}
+							});
+							tmp = obj.index;
+							obj.index = nL.index;
+							nL.index = tmp;
+							nL.style.border = "";
+
+						}else{
+							startMove({
+								obj:obj,
+								attrs:{left:arr[obj.index][0] , top:arr[obj.index][1]}
+							});
+						}
+						
+					}
+
+					return false;
+				};
+
+			}
+
+			//通过求图片和被碰撞图片左上角顶点之间的距离，找出相交面积最大的li
+			function nearLi(obj){
+				var val = 999;
+				var index = -1;
+
+				for( var i =0;i<aLi.length;i++){
+					if( crash( obj, aLi[i] ) && obj != aLi[i] ){
+						var c = dis(obj, aLi[i]);
+						if( c < val ){
+							val = c;
+							index = i;
+						}
+					}
+				}
+
+				if( index != -1 ){
+					return aLi[index];
+				}else{
+					return false;
+				}
+			}
+
+			// 求两个元素左上角之间的距离
+			function dis(obj0,obj1){
+				var a = obj0.offsetLeft - obj1.offsetLeft;
+				var b = obj0.offsetTop - obj1.offsetTop;
+
+				return Math.sqrt( Math.pow(a,2) + Math.pow(b,2) );
+			}
+
+			//检测是否碰撞
+			function crash( obj0, obj1 ){
+				var l0 = obj0.offsetLeft;
+				var r0 = obj0.offsetLeft + obj0.offsetWidth;
+				var t0 = obj0.offsetTop;
+				var b0 = obj0.offsetTop + obj0.offsetHeight;
+
+				var l1 = obj1.offsetLeft;
+				var r1 = obj1.offsetLeft + obj1.offsetWidth;
+				var t1 = obj1.offsetTop;
+				var b1 = obj1.offsetTop + obj1.offsetHeight;
+
+				// l0 > r1 ,not crash
+				// r0 < l1 , not crash
+				// b0 < t1 , not crash
+				// t0 > b1 , not crash
+				// 
+				if( l0>r1 || r0<l1 || b0<t1 || t0>b1 ){
+					return false;
+				}else{
+					return true;
+				}
+
+			}
+
+
+
+			
+
+		}
+
+	</script>
+</head>
+<body>
+	<input type = "button" value = "随机" id="btn">
+	<ul id="list">
+		<li><img src="images/0.jpg"></li>
+		<li><img src="images/1.jpg"></li>
+		<li><img src="images/2.jpg"></li>
+		<li><img src="images/3.jpg"></li>
+		<li><img src="images/4.jpg"></li>
+		<li><img src="images/5.jpg"></li>
+		<li><img src="images/6.jpg"></li>
+		<li><img src="images/7.jpg"></li>
+		<li><img src="images/8.jpg"></li>
+	</ul>
+	
+</body>
+
+
+</html>
+
