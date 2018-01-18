@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>随机选择数字</title>
+	<!-- 厉害的是灵活运用了splice，起到了去重的作用 -->
+</head>
+<body>
+	<input type="button" value="随机选择" id="inp0">
+	<div id="div0"></div>
+
+	<script>
+		oInp = document.getElementById("inp0");
+		oDiv = document.getElementById("div0");
+
+		oInp.onclick = function(){
+			oDiv.innerHTML = randomNum(35,7);
+		};
+
+		function randomNum(iAll,iNow){
+			var arr= [];
+			var arrNew = [];
+			for(var i=1;i<=iAll;i++){
+				arr.push(i);
+			}
+			
+			for(var i=0;i<iNow;i++){
+				arrNew.push( arr.splice( Math.floor( Math.random()*arr.length ) ,1) );
+				// console.log("arr.length: "+arr.length);
+				
+				// splice 返回的是被删除的元素
+				// splice 会修改原数组
+				// splice 第一个参数是起始位置
+				// 
+				// Math.random()返回的是[0,1);
+				// Math.random()*arr.length [0,arr.length)
+				// 向下取整：[0,arr.length)中的一位数
+				// 
+				// 综上：起到了去重的作用
+			}
+
+			return arrNew;
+		};
+
+
+
+	</script>
+	
+</body>
+</html>

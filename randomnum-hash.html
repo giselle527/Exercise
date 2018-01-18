@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>改变hash值控制页面内容（随机数）</title>
+</head>
+<body>
+	<input type="button" value="随机选择" id="inp0">
+	<div id="div0"></div>
+
+	<script>
+		oInp = document.getElementById("inp0");
+		oDiv = document.getElementById("div0");
+
+		var json = {};
+
+		oInp.onclick = function(){
+
+			var num = Math.random();
+			var arr = randomNum(35,7);
+			json[num] = arr; //通过json对象，将num和arr对应起来
+			oDiv.innerHTML = arr;
+			window.location.hash = num; //通过num改变hash值
+
+		};
+
+		window.onhashchange = function(){ //hash值改变时触发的事件
+
+			if( window.location.hash ){
+				// window.location.hash获取到的hash值自带#
+				oDiv.innerHTML = json[ window.location.hash.substring(1) ];
+			}
+		}
+
+		function randomNum(iAll,iNow){
+			var arr= [];
+			var arrNew = [];
+			for(var i=1;i<=iAll;i++){
+				arr.push(i);
+			}
+
+			for(var i=0;i<iNow;i++){
+				arrNew.push( arr.splice( Math.floor( Math.random()*arr.length ) ,1) );
+
+			}
+
+			return arrNew;
+		};
+
+
+	</script>
+	
+</body>
+</html>

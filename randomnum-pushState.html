@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>通过pushState控制页面内容（随机数）</title>
+</head>
+<body>
+	<input type="button" value="随机选择" id="inp0">
+	<div id="div0"></div>
+
+	<script>
+		oInp = document.getElementById("inp0");
+		oDiv = document.getElementById("div0");
+
+		oInp.onclick = function(){
+
+			var arr = randomNum(35,7);
+
+			history.pushState( arr,"",Math.random() ); //通过pushState写入数据
+
+			oDiv.innerHTML = arr;
+		};
+
+		window.onpopstate = function(ev){
+			var ev = ev || event;
+			oDiv.innerHTML = ev.state; //通过ev.state读取数据
+		}
+
+		function randomNum(iAll,iNow){
+			var arr= [];
+			var arrNew = [];
+			for(var i=1;i<=iAll;i++){
+				arr.push(i);
+			}
+			
+			for(var i=0;i<iNow;i++){
+				arrNew.push( arr.splice( Math.floor( Math.random()*arr.length ) ,1) );
+			}
+
+			return arrNew;
+		};
+
+
+
+	</script>
+	
+</body>
+</html>

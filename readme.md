@@ -4,6 +4,33 @@ readme
 ---
 [TOC]
 
+## randomnum
+
+**介绍** 
+  
+主要说明了如何进行浏览器历史管理：1.跳转页面；2.改变hash(#)值；3.pushState。跳转页面自不必说，点击链接页面就会跳转，通过浏览器页面上的前进后退可以切换。以下主要讲了后两种方法。
+
+### randomnum
+
+**介绍**  
+
+随机选择数字。很厉害的是灵活运用了splice，对选出的数据做了去重复操作。
+
+### randomnum-hash
+
+**介绍**  
+
+通过改变hash值来控制页面内容，主要事件：onhashchange。
+
+### randomnum-pushState
+
+**介绍**  
+
+通过改变history对象中的state属性来控制页面内容：  
+主要方法：pushState();    
+主要事件：onpopstate    
+主要属性：event.state   
+
 ## photowall
 
 **介绍**
